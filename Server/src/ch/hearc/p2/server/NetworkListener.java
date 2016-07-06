@@ -14,9 +14,11 @@ import ch.hearc.p2.server.Packet.Packet3Team;
 public class NetworkListener extends Listener {
 
     private Server server;
+    private PlatformerServer pfServer;
 
-    public void init(Server server) {
+    public void init(Server server, PlatformerServer pfServer) {
 	this.server = server;
+	this.pfServer = pfServer;
     }
 
     @Override
@@ -36,18 +38,23 @@ public class NetworkListener extends Listener {
 	System.out.println("[SERVER] A message was received");
 	if (o instanceof Packet0LoginRequest) {
 	    Packet1LoginAnswer loginAnswer = new Packet1LoginAnswer();
-	    loginAnswer.accepted = true;
+	    loginAnswer.accepted = pfServer.addPlayer(c);
 	    c.sendTCP(loginAnswer);
 	}
 	if (o instanceof Packet2Message) {
 	    String message = ((Packet2Message) o).message;
-	    if(message == "CONFIRMED")
-	    {
+	    if (message.equals("CONFIRMED")) {
 		Packet3Team team = new Packet3Team();
-		team.team = "RED";
+		if (server.getConnections().length % 2 == 0){
+		    team.team = "BLUE";
+		}
+		else{
+		    team.team = "RED";  
+		}
 		c.sendTCP(team);
 	    }
 	}
+
     }
 
 }

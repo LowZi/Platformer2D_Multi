@@ -41,6 +41,7 @@ public class NetworkListener extends Listener {
 	    if (answer) {
 		Packet2Message p = new Packet2Message();
 		p.message = "CONFIRMED";
+		System.out.println("[CLIENT] CONNECTED");
 		c.sendTCP(p);
 	    } else {
 		c.close();

@@ -2,7 +2,6 @@
 package ch.hearc.p2.game.network;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -15,7 +14,7 @@ import ch.hearc.p2.game.network.Packet.Packet3Team;
 public class PlatformerClient {
 
     private Client client;
-    private static PlatformerClient plClient;
+    private static PlatformerClient plClient = null;
     private String team = "";
 
     private PlatformerClient() {
@@ -29,7 +28,7 @@ public class PlatformerClient {
 	client.start();
 
 	try {
-	    client.connect(5000, "", 54555);
+	    client.connect(5000, "localhost", 54555);
 	} catch (IOException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
@@ -38,11 +37,12 @@ public class PlatformerClient {
     }
 
     public static PlatformerClient getInstance() {
-	if (plClient != null) {
+	if (plClient == null) {
 	    plClient = new PlatformerClient();
 	    return plClient;
-	} else
+	} else{
 	    return plClient;
+	}
     }
 
     private void register() {
