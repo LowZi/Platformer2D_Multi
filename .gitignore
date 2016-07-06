@@ -1,12 +1,19 @@
+#Eclipse
+.metadata
+.recommenders
+
+#Compiled source
+*/bin/
+*/lib/
 *.class
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# eclipse config file
+*.lock
 
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+#OS generate file
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

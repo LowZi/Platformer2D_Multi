@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="20" tilewidth="70" tileheight="70" nextobjectid="51">
+ <tileset firstgid="1" name="sheet" tilewidth="70" tileheight="70" tilecount="98" columns="14">
+  <image source="tiles/map/sheet.png" width="980" height="490"/>
+  <tile id="84">
+   <properties>
+    <property name="tileType" value="air"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="99" name="tiles_spritesheet" tilewidth="70" tileheight="70" spacing="2" tilecount="156" columns="12">
+  <image source="tiles/map/tiles_spritesheet.png" width="914" height="936"/>
+  <tile id="80">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="255" name="spritesheet" tilewidth="70" tileheight="70" spacing="1" tilecount="49" columns="7">
+  <image source="tiles/map/spritesheet.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="304" name="grayy" tilewidth="32" tileheight="32" tilecount="800" columns="20">
+  <image source="tiles/map/grassy_tileset.png" width="640" height="1280"/>
+ </tileset>
+ <layer name="Limite" width="50" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3PsQkAIAwF0WznBK7lzFaCpYjiGa54RZrwr0RESaJ+zg4WO1jsYLGDxQ4WO1jsYMnSMVpeb7ipTXbulb8nZenoXIayVqAPAAA=
+  </data>
+ </layer>
+ <layer name="CollisionLayer" width="50" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2VwQ2AIAxFux0TMKlb4N0FGMOLXkhM0yIUioV4+Ik9YPv83+IAwC0iP7l+DltamWNDdbwVXuSZ510wUxScK/XjFAq/JxT06p0r7IuEhzrf+u1b/Oglik2SO5xZB3TWLXNwfuAsaDJJOEqyR3FwTDXi+mr6Ye3/0Ny7X+bKCsczb7NypNlzd0ovjgN0di/FMHLvpj2FZ6qtS+94TQ7cT1KP5Mj1nI3jAhvZ1iOgDwAA
+  </data>
+ </layer>
+ <layer name="End" width="50" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3OQQ0AMAgEsDOJxwlAICa2hCx99N9KUgA8cRYcbugFBwCA3w2CQhfQoA8AAA==
+  </data>
+ </layer>
+ <layer name="Object" width="50" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACwtlYGAIHcWjeBRTFbMx0s7s0kHgP3y4e4Dt7xgEYTBc8eJB4IZRTD4uxSP3GY1PyzKMVAwDA+mGwRQe2PBwKPemDwI3DEVMrbRZOgj8Qkt8kkaYGPvI4ePCfTTCxNhHDn+w+GOoYQB81nW9oA8AAA==
+  </data>
+ </layer>
+</map>
