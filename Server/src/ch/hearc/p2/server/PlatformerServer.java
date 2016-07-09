@@ -29,7 +29,7 @@ public class PlatformerServer {
 	NetworkListener nl = new NetworkListener();
 	nl.init(server, this);
 	server.addListener(nl);
-	
+
 	server.bind(54555);
 	server.start();
     }

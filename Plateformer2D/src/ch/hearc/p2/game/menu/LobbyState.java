@@ -83,7 +83,7 @@ public class LobbyState extends BasicGameState {
 	bleu.draw(WindowGame.BASE_WINDOW_WIDTH / 4, 150);
 	rouge.draw((WindowGame.BASE_WINDOW_WIDTH / 4) * 3 - rouge.getWidth(), 150);
 
-	if (team == "RED")
+	if (team.equals("RED"))
 	    player1.draw((WindowGame.BASE_WINDOW_WIDTH / 4) * 3 - rouge.getWidth(), 250);
 	else
 	    player1.draw(WindowGame.BASE_WINDOW_WIDTH / 4, 250);
@@ -91,9 +91,10 @@ public class LobbyState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+	
 	team = pf.getTeam();
 
-	if (team == "RED") {
+	if (team.equals("RED")) {
 	    localImgPlayer1.setBackground(new Color(211, 59, 39));
 	    localImgPlayer1.clear();
 	    localImgPlayer1.flush();
