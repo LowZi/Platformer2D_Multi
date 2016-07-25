@@ -1,19 +1,21 @@
 package ch.hearc.p2.game.hud;
 
+import javax.swing.Timer;
+
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import ch.hearc.p2.game.WindowGame;
+
 import ch.hearc.p2.game.character.PlayerOnline;
 
 public class HudOnline {
 
     private Image[] life;
     private Image[] numbers;
-    private Image coin;
-    private Image cleVide;
-    private Image clePleine;
+    private CountDown countDown;
+    private Timer timer;
 
     /*------------------------------------------------------------------*\
     |*				Constructeurs			  	*|
@@ -21,6 +23,9 @@ public class HudOnline {
 
     public HudOnline() {
 
+	countDown = new CountDown(1, 5);
+	timer = new Timer(1000, countDown);
+	timer.start();
     }
 
     /*------------------------------------------------------------------*\
@@ -43,9 +48,7 @@ public class HudOnline {
 	numbers[7] = new Image("ressources/hud/hud7.png");
 	numbers[8] = new Image("ressources/hud/hud8.png");
 	numbers[9] = new Image("ressources/hud/hud9.png");
-	coin = new Image("ressources/hud/hudCoin.png");
-	cleVide = new Image("ressources/hud/hudKey_red_empty.png");
-	clePleine = new Image("ressources/hud/hudKey_red.png");
+
     }
 
     public void render(Graphics g, PlayerOnline p) {
@@ -93,19 +96,13 @@ public class HudOnline {
 	    break;
 	}
 
-	int point = p.getPoint();
+	//Position pour les points
 	int x = 1680;
-	if (point == 0)
-	    g.drawImage(numbers[0], x, 18);
-	while (point > 0) {
-	    g.drawImage(numbers[point % 10], x, 18);
-	    point = point / 10;
-	    x -= 80;
-	}
-	g.drawImage(coin, 1780, 20);
 
+	
 	int munition = p.getWeapon().getMunition();
 	x = 210;
+
 	if (munition == 0)
 	    g.drawImage(numbers[0], x, 950);
 	while (munition > 0) {
@@ -114,8 +111,33 @@ public class HudOnline {
 	    x -= 80;
 	}
 
+	int seconds = countDown.getSeconds();
 	x = 1780;
+	if (seconds == 0) {
+	    g.drawImage(numbers[0], x, 950);
+	}
+	if (seconds <= 9) {
+	    g.drawImage(numbers[0], x - 80, 950);
+	}
+	while (seconds > 0) {
+	    g.drawImage(numbers[seconds % 10], x, 950);
+	    seconds = seconds / 10;
+	    x -= 80;
+	}
 
+	int minutes = countDown.getMinutes();
+	x = 1600;
+	if (minutes == 0)
+	    g.drawImage(numbers[0], x, 950);
+	while (minutes > 0) {
+	    g.drawImage(numbers[minutes % 10], x, 950);
+	    minutes = minutes / 10;
+	    x -= 80;
+	}
+
+	if (countDown.isFinished()) {
+	    timer.stop();
+	}
     }
 
 }
