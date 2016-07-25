@@ -51,6 +51,12 @@ public class HudOnline {
 
     }
 
+    public int getTime() {
+	int time = countDown.getSeconds();
+	time += 60 * countDown.getMinutes();
+	return time;
+    }
+
     public void render(Graphics g, PlayerOnline p) {
 	g.resetTransform();
 
@@ -96,10 +102,18 @@ public class HudOnline {
 	    break;
 	}
 
-	//Position pour les points
-	int x = 1680;
+	// Position pour les points
+	int x = 960;
 
-	
+	int point = p.getPoint();
+	if (point == 0)
+	    g.drawImage(numbers[0], x, 18);
+	while (point > 0) {
+	    g.drawImage(numbers[point % 10], x, 18);
+	    point = point / 10;
+	    x -= 80;
+	}
+
 	int munition = p.getWeapon().getMunition();
 	x = 210;
 
@@ -112,25 +126,25 @@ public class HudOnline {
 	}
 
 	int seconds = countDown.getSeconds();
-	x = 1780;
+	x = 1680;
 	if (seconds == 0) {
-	    g.drawImage(numbers[0], x, 950);
+	    g.drawImage(numbers[0], x, 18);
 	}
 	if (seconds <= 9) {
-	    g.drawImage(numbers[0], x - 80, 950);
+	    g.drawImage(numbers[0], x - 80, 18);
 	}
 	while (seconds > 0) {
-	    g.drawImage(numbers[seconds % 10], x, 950);
+	    g.drawImage(numbers[seconds % 10], x, 18);
 	    seconds = seconds / 10;
 	    x -= 80;
 	}
 
 	int minutes = countDown.getMinutes();
-	x = 1600;
+	x = 1500;
 	if (minutes == 0)
-	    g.drawImage(numbers[0], x, 950);
+	    g.drawImage(numbers[0], x, 18);
 	while (minutes > 0) {
-	    g.drawImage(numbers[minutes % 10], x, 950);
+	    g.drawImage(numbers[minutes % 10], x, 18);
 	    minutes = minutes / 10;
 	    x -= 80;
 	}
