@@ -20,7 +20,7 @@ import ch.hearc.p2.game.character.Ennemie;
 import ch.hearc.p2.game.character.Player;
 import ch.hearc.p2.game.controller.MouseAndKeyBoardPlayerController;
 import ch.hearc.p2.game.controller.PlayerController;
-import ch.hearc.p2.game.hud.Hud;
+import ch.hearc.p2.game.hud.HudOnline;
 import ch.hearc.p2.game.level.Level;
 import ch.hearc.p2.game.level.LevelObject;
 import ch.hearc.p2.game.level.object.Objective;
@@ -47,7 +47,7 @@ public abstract class LevelState extends BasicGameState {
 
     protected StateBasedGame sbg;
 
-    protected Hud hud;
+    protected HudOnline hud; // TODO remettre Hud
 
     protected Music musiclvl;
 
@@ -96,7 +96,7 @@ public abstract class LevelState extends BasicGameState {
 	ennemies = new ArrayList<Ennemie>();
 	objectives = new ArrayList<Objective>();
 
-	hud = new Hud();
+	hud = new HudOnline(); // TODO remettre Hud
 
 	instanciation();
     }
