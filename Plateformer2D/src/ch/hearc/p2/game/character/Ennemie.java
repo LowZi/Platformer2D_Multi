@@ -56,16 +56,10 @@ public class Ennemie extends Character {
 	this.maximumFallSpeed = maximumFallSpeed;
     }
 
-    public void setDead(Boolean b) {
-	this.dead = b;
-    }
-
     /*----------------------*\
     |*		Is	    *|
     \*----------------------*/
 
-    public Boolean isDead() {
-	return dead;
-    }
+
 
 }

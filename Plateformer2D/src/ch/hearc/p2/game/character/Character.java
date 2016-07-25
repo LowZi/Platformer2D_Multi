@@ -21,6 +21,7 @@ public abstract class Character extends LevelObject {
     protected boolean moving = false;
     protected boolean dead;
     protected boolean hited;
+    protected boolean isDead = false;
 
     protected HashMap<Facing, Image> sprites;
     protected HashMap<Facing, Animation> movingAnimations;
@@ -179,6 +180,14 @@ public abstract class Character extends LevelObject {
     public void setLife(int life) {
 	this.life = life;
     }
+    
+    public void setDead(boolean dead) {
+   	isDead = dead;
+      }
+    
+    public void setFacing(Facing facing){
+	this.facing = facing;
+    }
 
     /*------------------------------*\
     |*		    Get	   	    *|
@@ -186,6 +195,10 @@ public abstract class Character extends LevelObject {
 
     public int getLife() {
 	return life;
+    }
+    
+    public Facing getFacing(){
+	return facing;
     }
 
     /*------------------------------*\
@@ -195,5 +208,11 @@ public abstract class Character extends LevelObject {
     public boolean isMoving() {
 	return moving;
     }
+    
+    public boolean isDead(){
+	return isDead;
+    }
+    
+ 
 
 }

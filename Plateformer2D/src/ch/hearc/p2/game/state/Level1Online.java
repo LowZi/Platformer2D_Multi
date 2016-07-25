@@ -4,50 +4,36 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 
-import ch.hearc.p2.game.character.Abeille;
-import ch.hearc.p2.game.character.Player;
-import ch.hearc.p2.game.character.SnakeLava;
-import ch.hearc.p2.game.character.Spider;
+import ch.hearc.p2.game.character.PlayerOnline;
+import ch.hearc.p2.game.enums.Team;
+import ch.hearc.p2.game.level.object.Case;
 import ch.hearc.p2.game.level.object.Coin;
-import ch.hearc.p2.game.level.object.Key;
 
-public class Level1 extends LevelState {
+public class Level1Online extends LevelStateOnline {
 
     /*------------------------------------------------------------------*\
     |*				Constructeurs			  	*|
     \*------------------------------------------------------------------*/
-    
-    public Level1(String startingLevel) {
+
+    public Level1Online(String startingLevel) {
 	super(startingLevel);
-	ID = 101;
+	ID = 701;
 	this.startinglevel = startingLevel;
-	nextLevel = 102;
 
     }
-    
+
     /*------------------------------------------------------------------*\
     |*				Methodes Public		    		*|
     \*------------------------------------------------------------------*/
-    
+
     @Override
     public void instanciation() throws SlickException {
 	// at the start of the game we don't have a player yet
-	player = new Player(1 * 70, 16 * 70);
-	
-
-	// Remplis ennmis
-	ennemies.add(new Abeille(5 * 70, 6 * 70));
-	ennemies.add(new Abeille(26 * 70, 9 * 70));
-	ennemies.add(new Abeille(38 * 70, 9 * 70));
-	ennemies.add(new Spider(31 * 70, 17 * 70));
-	ennemies.add(new SnakeLava(15 * 70, 14 * 70));
+	player = new PlayerOnline(20 * 70, 16 * 70, Team.RED, "");
 
 	// Remplis Objectifs
-	objectives.add(new Coin(8 * 70, 6 * 70));
-	objectives.add(new Coin(23 * 70, 5 * 70));
-	objectives.add(new Coin(37 * 70, 10 * 70));
-	objectives.add(new Coin(35 * 70, 17 * 70));
-	objectives.add(new Key(6 * 70, 7 * 70));
+	cases.add(new Case(10 * 70, 3 * 70));
+	cases.add(new Coin(12 * 70, 3 * 70));
 
 	// setup music
 	musiclvl = new Music("ressources/audio/music/lvl1.ogg");

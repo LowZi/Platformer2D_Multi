@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="25" tilewidth="70" tileheight="70" nextobjectid="51">
+ <tileset firstgid="1" name="sheet" tilewidth="70" tileheight="70" tilecount="98" columns="14">
+  <image source="tiles/map/sheet.png" width="980" height="490"/>
+  <tile id="37">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="39">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="50">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="51">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="52">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="53">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="84">
+   <properties>
+    <property name="tileType" value="air"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="99" name="tiles_spritesheet" tilewidth="70" tileheight="70" spacing="2" tilecount="156" columns="12">
+  <image source="tiles/map/tiles_spritesheet.png" width="914" height="936"/>
+  <tile id="124">
+   <properties>
+    <property name="tileType" value="halfDown"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="255" name="spritesheet" tilewidth="70" tileheight="70" spacing="1" tilecount="49" columns="7">
+  <image source="tiles/map/spritesheet.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="304" name="grayy" tilewidth="32" tileheight="32" tilecount="800" columns="20">
+  <image source="tiles/map/grassy_tileset.png" width="640" height="1280"/>
+ </tileset>
+ <layer name="Limite" width="60" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3DQQ0AAAwDoTNZ/1YmYl9IWDVVVVVVVfX1AKrPzwNwFwAA
+  </data>
+ </layer>
+ <layer name="CollisionLayer" width="60" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3RsQ3AMAwDQY2iBTxO9l/FSJGWsNIQML/4ngeuqlphPSHhvbvP2yL3xmnKkvqvewdevHj/e1vk3jhNWVL/de/Aixcv3lNvi9wbpylL6r/uHXjx4sV76u2QXusGfi5J7HAXAAA=
+  </data>
+ </layer>
+ <layer name="Object" width="60" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3VsQ0AIAwDwawD+2T/VZiBAskRV1z/ld1V1fCBHdBwawU0ALxmnwFI4I8ASOCP5ju+o7k2cBcAAA==
+  </data>
+ </layer>
+ <layer name="BlueSpawn" width="60" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3VMREAMAwDMbMrgvCnEgAl4Mtp0O7JP0mG017BBgB+/hmABnoEQAM94ooFs6VcH3AXAAA=
+  </data>
+ </layer>
+ <layer name="RedSpawn" width="60" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3VMREAMAwDMbMrgvCnUgAl4F40aPfknyQDnzsFGwB4+WcAGugRAA30aIcL9TVl/nAXAAA=
+  </data>
+ </layer>
+ <layer name="Cases" width="60" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3MsQ0AMAwCML7rBfn/lZwQpVsrD14AUUkKAAAAAHjGWeZTd7vffsLvGnVNCV1wFwAA
+  </data>
+ </layer>
+</map>

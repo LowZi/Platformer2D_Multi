@@ -1,7 +1,6 @@
 
 package ch.hearc.p2.server;
 
-import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -10,6 +9,10 @@ import ch.hearc.p2.server.Packet.Packet0LoginRequest;
 import ch.hearc.p2.server.Packet.Packet1LoginAnswer;
 import ch.hearc.p2.server.Packet.Packet2Message;
 import ch.hearc.p2.server.Packet.Packet3Team;
+import ch.hearc.p2.server.Packet.Packet4StartGame;
+import ch.hearc.p2.server.Packet.Packet6SendData;
+import ch.hearc.p2.server.Packet.Packet7AllPlayers;
+import ch.hearc.p2.server.Packet.Packet8Projectile;
 
 public class NetworkListener extends Listener {
 
@@ -36,23 +39,59 @@ public class NetworkListener extends Listener {
     @Override
     public void received(Connection c, Object o) {
 	System.out.println("[SERVER] A message was received");
+
 	if (o instanceof Packet0LoginRequest) {
 	    Packet1LoginAnswer loginAnswer = new Packet1LoginAnswer();
-	    loginAnswer.accepted = pfServer.addPlayer(c);
-	    c.sendTCP(loginAnswer);
+	    String s = ((Packet0LoginRequest) o).pseudo;
+	    loginAnswer.accepted = pfServer.addPlayer(s, c);
+
+	    if (loginAnswer.accepted) {
+		c.sendTCP(loginAnswer);
+		Packet3Team team = new Packet3Team();
+		if (server.getConnections().length % 2 == 0) {
+		    team.team = "BLUE";
+		} else {
+		    team.team = "RED";
+		}
+
+		Packet7AllPlayers allPlayers = new Packet7AllPlayers();
+		pfServer.addPlayer(s, team.team);
+		allPlayers.players = pfServer.getPlayersTeam();
+
+		c.sendTCP(team);
+		server.sendToAllTCP(allPlayers);
+	    } else {
+		loginAnswer.accepted = false;
+		c.sendTCP(loginAnswer);
+	    }
+
 	}
+
 	if (o instanceof Packet2Message) {
 	    String message = ((Packet2Message) o).message;
-	    if (message.equals("CONFIRMED")) {
-		Packet3Team team = new Packet3Team();
-		if (server.getConnections().length % 2 == 0){
-		    team.team = "BLUE";
+	    if (message.equals("READY")) {
+		pfServer.addReady();
+		if (pfServer.getReady() == 2) {
+
+		    Packet4StartGame start = new Packet4StartGame();
+		    start.id = 701;
+		    server.sendToAllTCP(start);
 		}
-		else{
-		    team.team = "RED";  
-		}
-		c.sendTCP(team);
 	    }
+	}
+
+	if (o instanceof Packet6SendData) {
+	    server.sendToAllExceptTCP(c.getID(), o);
+	    // PlayerData data = ((Packet6SendData)o).data;
+	    // String pseudo = ((Packet6SendData)o).pseudo;
+	    // if(!data.toAddList.isEmpty())
+	    // System.out.println("[SERVER] [" + pseudo + "] toAdd" +
+	    // data.toAddList.toString());
+
+	}
+
+	if (o instanceof Packet8Projectile) {
+	    server.sendToAllExceptTCP(c.getID(), o);
 	}
 
     }

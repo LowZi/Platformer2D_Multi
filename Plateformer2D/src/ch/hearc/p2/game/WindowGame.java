@@ -7,6 +7,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import ch.hearc.p2.game.menu.DeadMenuInMulti;
 import ch.hearc.p2.game.menu.GameOver;
 import ch.hearc.p2.game.menu.LevelScreenGameState;
 import ch.hearc.p2.game.menu.LobbyState;
@@ -15,6 +16,7 @@ import ch.hearc.p2.game.menu.OptionGameState;
 import ch.hearc.p2.game.menu.PauseGameState;
 import ch.hearc.p2.game.menu.ServerChoiceState;
 import ch.hearc.p2.game.state.Level1;
+import ch.hearc.p2.game.state.Level1Online;
 import ch.hearc.p2.game.state.Level2;
 import ch.hearc.p2.game.state.Level3;
 import ch.hearc.p2.game.state.Level4;
@@ -69,8 +71,12 @@ public class WindowGame extends StateBasedGame {
 	addState(new GameOver());
 	addState(new LevelScreenGameState());
 	addState(new OptionGameState());
+	
+	//Online
 	addState(new ServerChoiceState());
 	addState(new LobbyState());
+	addState(new Level1Online("lvl1Online"));
+	addState(new DeadMenuInMulti());
     }
 
     /*------------------------------------------------------------------*\
@@ -82,8 +88,6 @@ public class WindowGame extends StateBasedGame {
 	WINDOW_HEIGHT = PREFERENCES.getInt("height", 600);
 	SCALE_W = 1 / ((CAMERA_TILES_W * TILE_SIZE) / WINDOW_WIDTH);
 	SCALE_H = 1 / ((CAMERA_TILES_H * TILE_SIZE) / WINDOW_HEIGHT);
-	System.out.println(SCALE_W);
-	System.out.println(SCALE_H);
 	FULLSCREEN = PREFERENCES.getBoolean("fullscreen", false);
     }
 

@@ -1,15 +1,25 @@
 package ch.hearc.p2.game.menu;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import ch.hearc.p2.game.WindowGame;
+import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.network.PlatformerClient;
 
 public class LobbyState extends BasicGameState {
@@ -23,10 +33,15 @@ public class LobbyState extends BasicGameState {
     private Image player1;
     private Graphics localImgPlayer1;
 
+    private static boolean start;
+    private static int id;
     private String team;
     private static String ip;
 
+    private Font font;
+
     private PlatformerClient pf;
+    private HashMap<String, String> players;
 
     private Sound rollover;
 
@@ -36,6 +51,9 @@ public class LobbyState extends BasicGameState {
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
+	start = false;
+	font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 35), false);
+
 	// Background image
 	background = new Image("ressources/background/background.jpg");
 
@@ -46,7 +64,7 @@ public class LobbyState extends BasicGameState {
 	cursor = new Image("ressources/cursor/hand_cursor.png");
 
 	// Color for button when mous is over
-	//Color color = new Color(255, 157, 67, 180);
+	// Color color = new Color(255, 157, 67, 180);
 
 	// Button "Quitter"
 	bleu = new Image("ressources/menu/bleu.png");
@@ -70,40 +88,71 @@ public class LobbyState extends BasicGameState {
 	// Change the image of the cursor when we enter in the state
 	container.setMouseCursor(cursor, 0, 0);
 
-	pf = PlatformerClient.getInstance();
+	try {
+	    pf = PlatformerClient.getInstance();
+	} catch (IOException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 	g.scale(WindowGame.SCALE_W, WindowGame.SCALE_H);
+	g.setFont(font);
 
 	// Render background
 	background.draw(0, 0, WindowGame.BASE_WINDOW_WIDTH, WindowGame.BASE_WINDOW_HEIGHT);
 	bleu.draw(WindowGame.BASE_WINDOW_WIDTH / 4, 150);
 	rouge.draw((WindowGame.BASE_WINDOW_WIDTH / 4) * 3 - rouge.getWidth(), 150);
 
-	if (team.equals("RED"))
-	    player1.draw((WindowGame.BASE_WINDOW_WIDTH / 4) * 3 - rouge.getWidth(), 250);
-	else
-	    player1.draw(WindowGame.BASE_WINDOW_WIDTH / 4, 250);
+	int xRed = (WindowGame.BASE_WINDOW_WIDTH / 4) * 3 - rouge.getWidth();
+	int xBlue = WindowGame.BASE_WINDOW_WIDTH / 4;
+	int yRed = 250;
+	int yBlue = 250;
+
+	players = (HashMap<String, String>) pf.getPlayers();
+	Set<String> cles = players.keySet();
+	java.util.Iterator<String> it = cles.iterator();
+	while (it.hasNext()) {
+	    String pseudo = it.next();
+	    String team = players.get(pseudo);
+
+	    if (team.equals("BLUE")) {
+		localImgPlayer1.setBackground(new Color(67, 167, 223));
+		localImgPlayer1.clear();
+		localImgPlayer1.flush();
+		player1.draw(xBlue, yBlue);
+		// g.setFont(container.getDefaultFont());
+		g.drawString(pseudo, xBlue + 10, yBlue + 10);
+		yBlue += 100;
+
+	    } else {
+		localImgPlayer1.setBackground(new Color(211, 59, 39));
+		localImgPlayer1.clear();
+		localImgPlayer1.flush();
+		player1.draw(xRed, yRed);
+		// g.setFont(container.getDefaultFont());
+		g.drawString(pseudo, xRed + 10, yRed + 10);
+		yRed += 100;
+	    }
+
+	}
+
     }
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-	
-	team = pf.getTeam();
 
-	if (team.equals("RED")) {
-	    localImgPlayer1.setBackground(new Color(211, 59, 39));
-	    localImgPlayer1.clear();
-	    localImgPlayer1.flush();
-	} else {
-	    localImgPlayer1.setBackground(new Color(67, 167, 223));
-	    localImgPlayer1.clear();
-	    localImgPlayer1.flush();
-	}
+	if (start)
+	    game.enterState(id);
 
+    }
+
+    public static void startGame(int gameID) {
+	start = true;
+	id = gameID;
     }
 
     /**

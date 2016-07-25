@@ -9,18 +9,17 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 import ch.hearc.p2.game.enums.Facing;
+import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.physics.AABoundingRect;
 import ch.hearc.p2.game.weapon.LanceGrenade;
 import ch.hearc.p2.game.weapon.Mitraillette;
 import ch.hearc.p2.game.weapon.Uzi;
 import ch.hearc.p2.game.weapon.Weapon;
 
-public class Player extends Character {
+public class PlayerOnline extends Character {
 
     private List<Weapon> weapons;
     private HashMap<Facing, Image> jumpSprite;
-
-    private boolean key;
 
     private Sound jump;
     private Sound coin;
@@ -33,20 +32,76 @@ public class Player extends Character {
     private int width;
     private int point;
 
+    private Team team;
+    private String pseudo;
+    
     /*------------------------------------------------------------------*\
     |*				Constructeurs			  	*|
     \*------------------------------------------------------------------*/
 
-    public Player(float x, float y) throws SlickException {
+    public PlayerOnline(float x, float y, Team team, String pseudo) throws SlickException {
 	super(x, y);
-	weapons = new LinkedList<Weapon>();
+
 	damage1 = System.currentTimeMillis();
 	damage2 = System.currentTimeMillis();
-	weaponIndex = 0;
+
 	point = 0;
+
 	height = 90;
 	width = 60;
-	key = false;
+
+	this.team = team;
+	if (team == Team.BLUE)
+	    loadBlueSprite();
+	else
+	    loadRedSprite();
+
+	this.pseudo = pseudo;
+
+	boundingShape = new AABoundingRect(x, y, width, height);
+
+	accelerationSpeed = 0.002f;
+	maximumSpeed = 0.55f;
+	maximumFallSpeed = 0.6f;
+	decelerationSpeed = 0.002f;
+
+	life = 6;
+	isDead = false;
+	
+	weapons = new LinkedList<Weapon>();
+	weapons.add(new Mitraillette(0, 0));
+	weapons.add(new LanceGrenade(0, 0));
+	weapons.add(new Uzi(0, 0));
+	weaponIndex = 0;
+
+	jump = new Sound("ressources/audio/sound/jump.ogg");
+	coin = new Sound("ressources/audio/sound/coin.ogg");
+    }
+
+    /*------------------------------------------------------------------*\
+    |*				Methodes Private		    	*|
+    \*------------------------------------------------------------------*/
+
+    private void loadRedSprite() throws SlickException {
+	sprites = setSprite(new Image("ressources/character/player/red/p3_stand.png"), sprites);
+	movingAnimations = setMovingAnimation(new Image[] { new Image("ressources/character/player/red/p3_walk01.png"),
+		new Image("ressources/character/player/red/p3_walk02.png"),
+		new Image("ressources/character/player/red/p3_walk03.png"),
+		new Image("ressources/character/player/red/p3_walk04.png"),
+		new Image("ressources/character/player/red/p3_walk05.png"),
+		new Image("ressources/character/player/red/p3_walk06.png"),
+		new Image("ressources/character/player/red/p3_walk07.png"),
+		new Image("ressources/character/player/red/p3_walk08.png"),
+		new Image("ressources/character/player/red/p3_walk09.png"),
+		new Image("ressources/character/player/red/p3_walk10.png"),
+		new Image("ressources/character/player/red/p3_walk11.png") }, 50, movingAnimations);
+
+	jumpSprite = setSprite(new Image("ressources/character/player/red/p3_jump.png"), jumpSprite);
+	hitedSprites = setSprite(new Image("ressources/character/player/red/p3_hurt.png"), hitedSprites);
+
+    }
+
+    private void loadBlueSprite() throws SlickException {
 	sprites = setSprite(new Image("ressources/character/player/blue/p2_stand.png"), sprites);
 	movingAnimations = setMovingAnimation(new Image[] { new Image("ressources/character/player/blue/p2_walk01.png"),
 		new Image("ressources/character/player/blue/p2_walk02.png"),
@@ -62,18 +117,6 @@ public class Player extends Character {
 
 	jumpSprite = setSprite(new Image("ressources/character/player/blue/p2_jump.png"), jumpSprite);
 	hitedSprites = setSprite(new Image("ressources/character/player/blue/p2_hit.png"), hitedSprites);
-	boundingShape = new AABoundingRect(x, y, width, height);
-
-	accelerationSpeed = 0.002f;
-	maximumSpeed = 0.55f;
-	maximumFallSpeed = 0.6f;
-	decelerationSpeed = 0.002f;
-	life = 6;
-	weapons.add(new Mitraillette(0, 0));
-	weapons.add(new LanceGrenade(0, 0));
-	weapons.add(new Uzi(0, 0));
-	jump = new Sound("ressources/audio/sound/jump.ogg");
-	coin = new Sound("ressources/audio/sound/coin.ogg");
     }
 
     /*------------------------------------------------------------------*\
@@ -111,11 +154,17 @@ public class Player extends Character {
 	}
     }
 
+    public String getPseudo() {
+	return pseudo;
+    }
+
     @Override
     public void render(int offset_x, int offset_y) {
 
 	time1 = System.currentTimeMillis();
 	damage1 = System.currentTimeMillis();
+	
+	
 
 	if (dead == false && hited == false) {
 	    if (movingAnimations != null && moving && onGround == true) {
@@ -151,10 +200,6 @@ public class Player extends Character {
     |*		Set	     *|
     \*-----------------------*/
 
-    public void setKey(boolean key) {
-	this.key = key;
-    }
-
     public void setWeaponIndex(int index) {
 	this.weaponIndex = index;
     }
@@ -167,13 +212,13 @@ public class Player extends Character {
 	point = i;
     }
 
+    public void setTeam(Team team) {
+	this.team = team;
+    }
+
     /*-----------------------*\
     |*		Get	     *|
     \*-----------------------*/
-
-    public boolean hasKey() {
-	return key;
-    }
 
     public int getWeaponIndex() {
 	return weaponIndex;
@@ -186,5 +231,11 @@ public class Player extends Character {
     public int getPoint() {
 	return point;
     }
+
+    public Team getTeam() {
+	return team;
+    }
+
+   
 
 }
