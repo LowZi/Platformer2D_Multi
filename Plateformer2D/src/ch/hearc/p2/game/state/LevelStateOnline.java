@@ -71,6 +71,8 @@ public abstract class LevelStateOnline extends BasicGameState {
 
     protected ArrayList<PlayerOnline> otherPlayers;
     protected ArrayList<Objective> cases;
+    protected LinkedList<String> disconnectedPlayers;
+    protected ArrayList<Weapon> playersWeapon;
 
     protected Weapon weapon;
 
@@ -111,8 +113,10 @@ public abstract class LevelStateOnline extends BasicGameState {
 	playersOnline = new HashMap<String, PlayerOnline>();
 	playerData = new PlayerData();
 	otherPlayers = new ArrayList<PlayerOnline>();
+	playersWeapon = new ArrayList<Weapon>();
 	cursor = new Image("ressources/cursor/viseur.png");
 	packetPlayerData = new Packet6SendData();
+	disconnectedPlayers = new LinkedList<String>();
 	initialisation();
 
     }
@@ -198,6 +202,9 @@ public abstract class LevelStateOnline extends BasicGameState {
 		if (!pseudo.equals(pseudoPlayer)) {
 		    level.addCharacter(pl);
 		    otherPlayers.add(pl);
+		    Weapon w = new Weapon(20 * 70, 16 * 70);
+		    level.addLevelObject(w);
+		    playersWeapon.add(w);
 		}
 
 	    } else {
@@ -205,6 +212,9 @@ public abstract class LevelStateOnline extends BasicGameState {
 		if (!pseudo.equals(pseudoPlayer)) {
 		    level.addCharacter(pl);
 		    otherPlayers.add(pl);
+		    Weapon w = new Weapon(20 * 70, 16 * 70);
+		    level.addLevelObject(w);
+		    playersWeapon.add(w);
 		}
 
 	    }
@@ -213,6 +223,14 @@ public abstract class LevelStateOnline extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
+
+	// Pour voir si le player est pas mort
+	if (player.getLife() <= 0) {
+	    player.setDead(true);
+	    musiclvl.fade(20, 0, true);
+	    sbg.enterState(1002, new FadeOutTransition(), new FadeInTransition());
+	}
+
 	if (weapon != player.getWeapon()) {
 	    level.removeObject(weapon);
 	    weapon = player.getWeapon();
@@ -227,6 +245,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 	playerData.y = (int) player.getY();
 	playerData.life = player.getLife();
 	playerData.facing = player.getFacing();
+	playerData.isDead = player.isDead();
 
 	getProjectileData();
 
@@ -234,6 +253,8 @@ public abstract class LevelStateOnline extends BasicGameState {
 	packetPlayerData.pseudo = pseudo;
 
 	plClient.sendTCP(packetPlayerData);
+
+	handleDisconnectedPlayers();
 
 	updatePlayersOnline();
 
@@ -265,13 +286,6 @@ public abstract class LevelStateOnline extends BasicGameState {
 
 	time1 = System.currentTimeMillis();
 
-	// Pour voir si le player est pas mort
-	if (player.getLife() <= 0) {
-	    player.setDead(true);
-	    musiclvl.fade(20, 0, true);
-	    sbg.enterState(1002, new FadeOutTransition(), new FadeInTransition());
-	}
-
 	// Pour voir les objectifs restant
 	cases = level.getObjectives();
 
@@ -287,6 +301,22 @@ public abstract class LevelStateOnline extends BasicGameState {
 	    shake();
 	    physics.setShake(false);
 	}
+    }
+
+    private void handleDisconnectedPlayers() {
+	disconnectedPlayers = plClient.getDisconnectedPlayer();
+
+	Iterator<PlayerOnline> it = otherPlayers.iterator();
+	while (it.hasNext()) {
+	    PlayerOnline p = it.next();
+	    String pseudo = p.getPseudo();
+	    if (disconnectedPlayers.contains(pseudo)) {
+		it.remove();
+		playersOnline.remove(pseudo);
+		level.removeCharacter(p);
+	    }
+	}
+
     }
 
     private void getProjectileData() {
@@ -340,6 +370,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 
 	    PlayerOnline p;
 	    while (itOtherPlayers.hasNext()) {
+		int i = 0;
 		p = itOtherPlayers.next();
 		if (p.getPseudo().equals(pseudoPlayer)) {
 		    p.setX(playerData.x);
@@ -348,7 +379,12 @@ public abstract class LevelStateOnline extends BasicGameState {
 		    p.setLife(playerData.life);
 		    p.setDead(playerData.isDead);
 		    p.setFacing(playerData.facing);
+		    
+		    playersWeapon.get(i).setX(p.getX() + 30);
+		    playersWeapon.get(i).setY(p.getY() + 30);
+		    i++;
 		}
+		
 	    }
 	}
 
@@ -365,11 +401,13 @@ public abstract class LevelStateOnline extends BasicGameState {
 
 	hud.render(g, player);
 	
-	for(PlayerOnline p: otherPlayers)
-	{
-	    g.drawString(p.getPseudo(), p.getX()-level.getXOffset(), p.getY()-level.getYOffset()-50);
+	int i = 0;
+	for (PlayerOnline p : otherPlayers) {
+	    if (!p.isDead())
+		g.drawString(p.getPseudo(), p.getX() - level.getXOffset(), p.getY() - level.getYOffset() - 50);
+	    i++;
 	}
-	g.drawString(pseudo, player.getX() - level.getXOffset(), player.getY()-level.getYOffset()-50);
+	g.drawString(pseudo, player.getX() - level.getXOffset(), player.getY() - level.getYOffset() - 50);
 
 	if (shakeX != 0 && shakeY != 0)
 	    g.translate(-shakeX, -shakeY);
@@ -385,7 +423,6 @@ public abstract class LevelStateOnline extends BasicGameState {
 	    isPause = true;
 	    sbg.enterState(50);
 	}
-
     }
 
     @Override

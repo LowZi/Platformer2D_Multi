@@ -335,6 +335,10 @@ public class LevelOnline {
 	map.render(-(offset_x % 70), -(offset_y % 70), offset_x / 70, offset_y / 70, map.getTileWidth(),
 		map.getHeight());
 
+	for (LevelObject obj : levelObjects) {
+	    obj.render(offset_x, offset_y);
+	}
+
 	// Rendu des personnages mais pas du joueur
 	for (Character c : characters) {
 	    if (!(c.isDead())) {
@@ -347,9 +351,6 @@ public class LevelOnline {
 	if (!player.isDead())
 	    player.render(offset_x, offset_y);
 
-	for (LevelObject obj : levelObjects) {
-	    obj.render(offset_x, offset_y);
-	}
     }
 
     public void removeObject(LevelObject obj) {

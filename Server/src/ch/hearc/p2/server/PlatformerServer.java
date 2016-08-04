@@ -18,17 +18,18 @@ import ch.hearc.p2.server.Packet.Packet4StartGame;
 import ch.hearc.p2.server.Packet.Packet6SendData;
 import ch.hearc.p2.server.Packet.Packet7AllPlayers;
 import ch.hearc.p2.server.Packet.Packet8Projectile;
+import ch.hearc.p2.server.Packet.Packet9Disconnect;
 
 public class PlatformerServer {
 
     private Server server;
-    private Map<String, Connection> players;
+    private Map<Connection, String> players;
     private Map<String, String> playersTeam;
     public static final int MAX_PLAYER = 4;
     private int ready = 0;
 
     public PlatformerServer() throws IOException {
-	players = new HashMap<String, Connection>(MAX_PLAYER);
+	players = new HashMap<Connection, String>(MAX_PLAYER);
 	playersTeam = new HashMap<String, String>(MAX_PLAYER);
 	server = new Server();
 	registerPackets();
@@ -57,7 +58,8 @@ public class PlatformerServer {
 	kryo.register(Packet6SendData.class);
 	kryo.register(Packet7AllPlayers.class);
 	kryo.register(Packet8Projectile.class);
-	
+	kryo.register(Packet9Disconnect.class);
+
 	kryo.register(PlayerData.class);
 	kryo.register(ProjectileData.class);
 	kryo.register(Facing.class);
@@ -67,7 +69,7 @@ public class PlatformerServer {
 
     public boolean addPlayer(String s, Connection c) {
 	if (players.size() < MAX_PLAYER) {
-	    players.put(s, c);
+	    players.put(c, s);
 	    return true;
 	} else {
 	    return false;
@@ -86,7 +88,7 @@ public class PlatformerServer {
 	return players.size();
     }
 
-    public Map<String, Connection> getPlayers() {
+    public Map<Connection, String> getPlayers() {
 	return players;
     }
 
@@ -108,6 +110,14 @@ public class PlatformerServer {
 
     public Map<String, String> getPlayersTeam() {
 	return playersTeam;
+    }
+
+    public String removePlayer(Connection c) {
+	String pseudo = players.get(c);
+	players.remove(c);
+	playersTeam.remove(pseudo);
+	return pseudo;
+
     }
 
 }

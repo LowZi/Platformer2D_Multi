@@ -17,6 +17,6 @@ public class Packet {
     public static class Packet6SendData{public String pseudo; public PlayerData data;}
     public static class Packet7AllPlayers{public Map players = new HashMap<String, String>();}
     public static class Packet8Projectile{ public float x; public float y; public float xVelocity; public float yVelocity; public ProjectileType type;}
-
+    public static class Packet9Disconnect{public String pseudo;}
 }
 

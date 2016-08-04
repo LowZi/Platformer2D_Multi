@@ -13,6 +13,7 @@ import ch.hearc.p2.server.Packet.Packet4StartGame;
 import ch.hearc.p2.server.Packet.Packet6SendData;
 import ch.hearc.p2.server.Packet.Packet7AllPlayers;
 import ch.hearc.p2.server.Packet.Packet8Projectile;
+import ch.hearc.p2.server.Packet.Packet9Disconnect;
 
 public class NetworkListener extends Listener {
 
@@ -31,7 +32,17 @@ public class NetworkListener extends Listener {
     }
 
     @Override
-    public void disconnected(Connection arg0) {
+    public void disconnected(Connection c) {
+	String pseudo = pfServer.removePlayer(c);
+
+	Packet7AllPlayers allPlayers = new Packet7AllPlayers();
+	allPlayers.players = pfServer.getPlayersTeam();
+	server.sendToAllTCP(allPlayers);
+
+	Packet9Disconnect disconnectedPlayer = new Packet9Disconnect();
+	disconnectedPlayer.pseudo = pseudo;
+	server.sendToAllTCP(disconnectedPlayer);
+
 	System.out.println("[SERVER] Someone has disconnected");
 
     }
@@ -71,8 +82,7 @@ public class NetworkListener extends Listener {
 	    String message = ((Packet2Message) o).message;
 	    if (message.equals("READY")) {
 		pfServer.addReady();
-		if (pfServer.getReady() == 2) {
-
+		if (pfServer.getReady() >= 2) {
 		    Packet4StartGame start = new Packet4StartGame();
 		    start.id = 701;
 		    server.sendToAllTCP(start);
@@ -82,12 +92,6 @@ public class NetworkListener extends Listener {
 
 	if (o instanceof Packet6SendData) {
 	    server.sendToAllExceptTCP(c.getID(), o);
-	    // PlayerData data = ((Packet6SendData)o).data;
-	    // String pseudo = ((Packet6SendData)o).pseudo;
-	    // if(!data.toAddList.isEmpty())
-	    // System.out.println("[SERVER] [" + pseudo + "] toAdd" +
-	    // data.toAddList.toString());
-
 	}
 
 	if (o instanceof Packet8Projectile) {

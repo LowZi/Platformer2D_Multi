@@ -19,6 +19,7 @@ import ch.hearc.p2.game.network.Packet.Packet4StartGame;
 import ch.hearc.p2.game.network.Packet.Packet6SendData;
 import ch.hearc.p2.game.network.Packet.Packet7AllPlayers;
 import ch.hearc.p2.game.network.Packet.Packet8Projectile;
+import ch.hearc.p2.game.network.Packet.Packet9Disconnect;
 import ch.hearc.p2.game.projectile.ProjectileData;
 
 public class PlatformerClient {
@@ -30,6 +31,7 @@ public class PlatformerClient {
     private HashMap<String, PlayerData> playersData;
     private HashMap<String, String> playersTeam;
     private LinkedList<ProjectileData> toAddprojectiles;
+    private LinkedList<String> disconnectedPlayers;
 
     private PlatformerClient() throws IOException {
 	client = new Client();
@@ -37,7 +39,7 @@ public class PlatformerClient {
 	playersData = new HashMap<String, PlayerData>();
 	playersTeam = new HashMap<String, String>();
 	toAddprojectiles = new LinkedList<ProjectileData>();
-	
+
 	NetworkListener nl = new NetworkListener();
 	nl.init(client, this);
 	client.addListener(nl);
@@ -54,6 +56,7 @@ public class PlatformerClient {
 	playersData = new HashMap<String, PlayerData>();
 	playersTeam = new HashMap<String, String>();
 	toAddprojectiles = new LinkedList<ProjectileData>();
+	disconnectedPlayers = new LinkedList<String>();
 	NetworkListener nl = new NetworkListener();
 	nl.init(client, this);
 	client.addListener(nl);
@@ -98,6 +101,7 @@ public class PlatformerClient {
 	kryo.register(Packet6SendData.class);
 	kryo.register(Packet7AllPlayers.class);
 	kryo.register(Packet8Projectile.class);
+	kryo.register(Packet9Disconnect.class);
 
 	kryo.register(ch.hearc.p2.game.network.PlayerData.class);
 	kryo.register(ch.hearc.p2.game.projectile.ProjectileData.class);
@@ -156,5 +160,15 @@ public class PlatformerClient {
 	LinkedList<ProjectileData> l = new LinkedList<ProjectileData>(toAddprojectiles);
 	toAddprojectiles.clear();
 	return l;
+    }
+
+    public void addDisconnectedPlayer(String pseudo) {
+	disconnectedPlayers.add(pseudo);
+    }
+
+    public LinkedList<String> getDisconnectedPlayer() {
+	LinkedList<String> cpy = new LinkedList<String>(disconnectedPlayers);
+	disconnectedPlayers.clear();
+	return cpy;
     }
 }

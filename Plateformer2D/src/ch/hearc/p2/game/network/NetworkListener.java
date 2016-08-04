@@ -14,6 +14,7 @@ import ch.hearc.p2.game.network.Packet.Packet4StartGame;
 import ch.hearc.p2.game.network.Packet.Packet6SendData;
 import ch.hearc.p2.game.network.Packet.Packet7AllPlayers;
 import ch.hearc.p2.game.network.Packet.Packet8Projectile;
+import ch.hearc.p2.game.network.Packet.Packet9Disconnect;
 import ch.hearc.p2.game.projectile.ProjectileData;
 
 public class NetworkListener extends Listener {
@@ -73,11 +74,16 @@ public class NetworkListener extends Listener {
 	    PlayerData data = ((Packet6SendData) o).data;
 	    plClient.putPlayersData(pseudo, data);
 	}
-	
-	if(o instanceof Packet8Projectile){
 
-	    ProjectileData p = new ProjectileData(((Packet8Projectile)o).x, ((Packet8Projectile)o).y, ((Packet8Projectile)o).xVelocity, ((Packet8Projectile)o).yVelocity, ((Packet8Projectile)o).type);
+	if (o instanceof Packet8Projectile) {
+
+	    ProjectileData p = new ProjectileData(((Packet8Projectile) o).x, ((Packet8Projectile) o).y,
+		    ((Packet8Projectile) o).xVelocity, ((Packet8Projectile) o).yVelocity, ((Packet8Projectile) o).type);
 	    plClient.putProjectile(p);
+	}
+	if (o instanceof Packet9Disconnect) {
+	    String pseudo = ((Packet9Disconnect)o).pseudo;
+	    plClient.addDisconnectedPlayer(pseudo);
 	}
     }
 
