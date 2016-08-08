@@ -22,30 +22,54 @@ import ch.hearc.p2.server.Packet.Packet9Disconnect;
 
 public class PlatformerServer {
 
+    public static void main(String[] args) {
+	try {
+	    new PlatformerServer();
+	    System.out.println("Server started");
+	    Log.set(Log.LEVEL_DEBUG);
+	} catch (IOException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+    }
+
+    /*------------------------------------------------------------------*\
+    |*				Attributs Private		    	*|
+    \*------------------------------------------------------------------*/
+
     private Server server;
     private Map<Connection, String> players;
     private Map<String, String> playersTeam;
-    public static final int MAX_PLAYER = 4;
-    private int ready = 0;
+    private int ready;
+    private static final int MAX_PLAYER = 4;
+
+    /*------------------------------------------------------------------*\
+    |*				Constructeurs			    	*|
+    \*------------------------------------------------------------------*/
 
     public PlatformerServer() throws IOException {
 	players = new HashMap<Connection, String>(MAX_PLAYER);
 	playersTeam = new HashMap<String, String>(MAX_PLAYER);
+	ready = 0;
+
 	server = new Server();
 	registerPackets();
 
-	NetworkListener nl = new NetworkListener();
-	nl.init(server, this);
+	NetworkListener nl = new NetworkListener(server, this);
 	server.addListener(nl);
 
-	server.bind(54555);
+	server.bind(54555); // Set de TCP port
 	server.start();
     }
 
+    /*------------------------------------------------------------------*\
+    |*				Methodes Private		    	*|
+    \*------------------------------------------------------------------*/
+
     private void registerPackets() {
 	Kryo kryo = server.getKryo();
-	kryo.register(java.util.HashMap.class);
 
+	kryo.register(java.util.HashMap.class);
 	kryo.register(java.util.List.class);
 	kryo.register(java.util.LinkedList.class);
 	kryo.register(java.util.ArrayList.class);
@@ -64,8 +88,11 @@ public class PlatformerServer {
 	kryo.register(ProjectileData.class);
 	kryo.register(Facing.class);
 	kryo.register(ProjectileType.class);
-
     }
+
+    /*------------------------------------------------------------------*\
+    |*				Methodes Public		 	    	*|
+    \*------------------------------------------------------------------*/
 
     public boolean addPlayer(String s, Connection c) {
 	if (players.size() < MAX_PLAYER) {
@@ -76,9 +103,24 @@ public class PlatformerServer {
 	}
     }
 
+    public void addPlayer(String s, String team) {
+	playersTeam.put(s, team);
+    }
+
     public void addReady() {
 	ready++;
     }
+
+    public String removePlayer(Connection c) {
+	String pseudo = players.get(c);
+	players.remove(c);
+	playersTeam.remove(pseudo);
+	return pseudo;
+    }
+
+    /*------------------------------*\
+    |*		Get		    *|
+    \*------------------------------*/
 
     public int getReady() {
 	return ready;
@@ -92,32 +134,7 @@ public class PlatformerServer {
 	return players;
     }
 
-    public static void main(String[] args) {
-	try {
-	    new PlatformerServer();
-	    System.out.println("Server started");
-	    Log.set(Log.LEVEL_DEBUG);
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-    }
-
-    public void addPlayer(String s, String team) {
-	playersTeam.put(s, team);
-
-    }
-
     public Map<String, String> getPlayersTeam() {
 	return playersTeam;
     }
-
-    public String removePlayer(Connection c) {
-	String pseudo = players.get(c);
-	players.remove(c);
-	playersTeam.remove(pseudo);
-	return pseudo;
-
-    }
-
 }

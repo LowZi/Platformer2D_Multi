@@ -19,13 +19,26 @@ import ch.hearc.p2.game.projectile.ProjectileData;
 
 public class NetworkListener extends Listener {
 
+    /*------------------------------------------------------------------*\
+    |*				Attributs Private		    	*|
+    \*------------------------------------------------------------------*/
+
     private Client client;
     private PlatformerClient plClient;
 
-    public void init(Client client, PlatformerClient plClient) {
+    /*------------------------------------------------------------------*\
+    |*				Constructeurs			    	*|
+    \*------------------------------------------------------------------*/
+
+    public NetworkListener(Client client, PlatformerClient plClient) {
+	super();
 	this.client = client;
 	this.plClient = plClient;
     }
+
+    /*------------------------------------------------------------------*\
+    |*				Methodes Public		 	    	*|
+    \*------------------------------------------------------------------*/
 
     @Override
     public void connected(Connection arg0) {
@@ -82,7 +95,7 @@ public class NetworkListener extends Listener {
 	    plClient.putProjectile(p);
 	}
 	if (o instanceof Packet9Disconnect) {
-	    String pseudo = ((Packet9Disconnect)o).pseudo;
+	    String pseudo = ((Packet9Disconnect) o).pseudo;
 	    plClient.addDisconnectedPlayer(pseudo);
 	}
     }

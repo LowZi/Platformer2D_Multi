@@ -17,18 +17,30 @@ import ch.hearc.p2.server.Packet.Packet9Disconnect;
 
 public class NetworkListener extends Listener {
 
+    /*------------------------------------------------------------------*\
+    |*				Attributs Private		    	*|
+    \*------------------------------------------------------------------*/
+
     private Server server;
     private PlatformerServer pfServer;
 
-    public void init(Server server, PlatformerServer pfServer) {
+    /*------------------------------------------------------------------*\
+    |*				Constructeurs			    	*|
+    \*------------------------------------------------------------------*/
+
+    public NetworkListener(Server server, PlatformerServer pfServer) {
+	super();
 	this.server = server;
 	this.pfServer = pfServer;
     }
 
+    /*------------------------------------------------------------------*\
+    |*				Methodes Public		 	    	*|
+    \*------------------------------------------------------------------*/
+
     @Override
     public void connected(Connection arg0) {
 	System.out.println("[SERVER] Someone has connected.");
-
     }
 
     @Override
@@ -44,7 +56,6 @@ public class NetworkListener extends Listener {
 	server.sendToAllTCP(disconnectedPlayer);
 
 	System.out.println("[SERVER] Someone has disconnected");
-
     }
 
     @Override
@@ -56,8 +67,9 @@ public class NetworkListener extends Listener {
 	    String s = ((Packet0LoginRequest) o).pseudo;
 	    loginAnswer.accepted = pfServer.addPlayer(s, c);
 
+	    c.sendTCP(loginAnswer);
+
 	    if (loginAnswer.accepted) {
-		c.sendTCP(loginAnswer);
 		Packet3Team team = new Packet3Team();
 		if (server.getConnections().length % 2 == 0) {
 		    team.team = "BLUE";
@@ -71,17 +83,15 @@ public class NetworkListener extends Listener {
 
 		c.sendTCP(team);
 		server.sendToAllTCP(allPlayers);
-	    } else {
-		loginAnswer.accepted = false;
-		c.sendTCP(loginAnswer);
 	    }
-
 	}
 
 	if (o instanceof Packet2Message) {
 	    String message = ((Packet2Message) o).message;
+
 	    if (message.equals("READY")) {
 		pfServer.addReady();
+
 		if (pfServer.getReady() >= 2) {
 		    Packet4StartGame start = new Packet4StartGame();
 		    start.id = 701;
@@ -97,7 +107,5 @@ public class NetworkListener extends Listener {
 	if (o instanceof Packet8Projectile) {
 	    server.sendToAllExceptTCP(c.getID(), o);
 	}
-
     }
-
 }

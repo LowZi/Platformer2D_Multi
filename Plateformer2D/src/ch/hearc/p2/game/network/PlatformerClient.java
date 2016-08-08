@@ -24,48 +24,73 @@ import ch.hearc.p2.game.projectile.ProjectileData;
 
 public class PlatformerClient {
 
+    /*------------------------------------------------------------------*\
+    |*				Attributs Private		    	*|
+    \*------------------------------------------------------------------*/
+
     private Client client;
-    private static PlatformerClient plClient = null;
-    private String team = "";
-    private String pseudo = "";
+
     private HashMap<String, PlayerData> playersData;
     private HashMap<String, String> playersTeam;
+
     private LinkedList<ProjectileData> toAddprojectiles;
     private LinkedList<String> disconnectedPlayers;
 
+    private String team;
+    private String pseudo;
+
+    private static PlatformerClient plClient = null;
+
+    /*------------------------------------------------------------------*\
+    |*				Constructeurs			    	*|
+    \*------------------------------------------------------------------*/
+
     private PlatformerClient() throws IOException {
 	client = new Client();
+
 	register();
+
 	playersData = new HashMap<String, PlayerData>();
 	playersTeam = new HashMap<String, String>();
+
 	toAddprojectiles = new LinkedList<ProjectileData>();
 
-	NetworkListener nl = new NetworkListener();
-	nl.init(client, this);
+	team = "";
+	pseudo = "";
+
+	NetworkListener nl = new NetworkListener(client, this);
 	client.addListener(nl);
 
 	client.start();
 
 	client.connect(5000, "localhost", 54555);
-
     }
 
     public PlatformerClient(String adresse) throws IOException {
 	client = new Client();
+
 	register();
+
 	playersData = new HashMap<String, PlayerData>();
 	playersTeam = new HashMap<String, String>();
+
 	toAddprojectiles = new LinkedList<ProjectileData>();
 	disconnectedPlayers = new LinkedList<String>();
-	NetworkListener nl = new NetworkListener();
-	nl.init(client, this);
+
+	team = "";
+	pseudo = "";
+
+	NetworkListener nl = new NetworkListener(client, this);
 	client.addListener(nl);
 
 	client.start();
 
 	client.connect(5000, adresse, 54555);
-
     }
+
+    /*------------------------------------------------------------------*\
+    |*				Méthodes Static 		    	*|
+    \*------------------------------------------------------------------*/
 
     public static PlatformerClient getInstance() throws IOException {
 	if (plClient == null) {
@@ -85,10 +110,14 @@ public class PlatformerClient {
 	}
     }
 
+    /*------------------------------------------------------------------*\
+    |*				Methodes Private		    	*|
+    \*------------------------------------------------------------------*/
+
     private void register() {
 	Kryo kryo = client.getKryo();
-	kryo.register(java.util.HashMap.class);
 
+	kryo.register(java.util.HashMap.class);
 	kryo.register(java.util.List.class);
 	kryo.register(java.util.LinkedList.class);
 	kryo.register(java.util.ArrayList.class);
@@ -107,8 +136,11 @@ public class PlatformerClient {
 	kryo.register(ch.hearc.p2.game.projectile.ProjectileData.class);
 	kryo.register(Facing.class);
 	kryo.register(ProjectileType.class);
-
     }
+
+    /*------------------------------------------------------------------*\
+    |*				Methodes Public		 	    	*|
+    \*------------------------------------------------------------------*/
 
     public void sendTCP(Object o) {
 	client.sendTCP(o);
@@ -118,52 +150,59 @@ public class PlatformerClient {
 	client.sendUDP(o);
     }
 
-    public void setTeam(String team) {
-	this.team = team;
-    }
-
-    public String getTeam() {
-	return team;
-    }
-
     public void putPlayersData(String pseudo, PlayerData data) {
 	playersData.put(pseudo, data);
 	playersData.replace(pseudo, data);
-    }
-
-    public HashMap<String, PlayerData> getPlayersData() {
-	return playersData;
-    }
-
-    public void setPseudo(String pseudo) {
-	this.pseudo = pseudo;
-
-    }
-
-    public String getPseudo() {
-	return pseudo;
-    }
-
-    public void setPlayers(Map<String, String> players) {
-	this.playersTeam = (HashMap<String, String>) players;
-    }
-
-    public Map<String, String> getPlayers() {
-	return playersTeam;
     }
 
     public void putProjectile(ProjectileData p) {
 	toAddprojectiles.add(p);
     }
 
+    public void addDisconnectedPlayer(String pseudo) {
+	disconnectedPlayers.add(pseudo);
+    }
+
+    /*------------------------------*\
+    |*		Set		    *|
+    \*------------------------------*/
+
+    public void setTeam(String team) {
+	this.team = team;
+    }
+
+    public void setPseudo(String pseudo) {
+	this.pseudo = pseudo;
+    }
+
+    public void setPlayers(Map<String, String> players) {
+	this.playersTeam = (HashMap<String, String>) players;
+    }
+
+    /*------------------------------*\
+    |*		Get		    *|
+    \*------------------------------*/
+
+    public String getTeam() {
+	return team;
+    }
+
+    public HashMap<String, PlayerData> getPlayersData() {
+	return playersData;
+    }
+
+    public String getPseudo() {
+	return pseudo;
+    }
+
+    public Map<String, String> getPlayers() {
+	return playersTeam;
+    }
+
     public LinkedList<ProjectileData> getProjectileData() {
 	LinkedList<ProjectileData> l = new LinkedList<ProjectileData>(toAddprojectiles);
 	toAddprojectiles.clear();
 	return l;
-    }
-
-    public void addDisconnectedPlayer(String pseudo) {
-	disconnectedPlayers.add(pseudo);
     }
 
     public LinkedList<String> getDisconnectedPlayer() {
