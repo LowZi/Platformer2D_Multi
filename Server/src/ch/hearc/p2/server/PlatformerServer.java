@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
@@ -27,7 +31,7 @@ public class PlatformerServer {
 	    new PlatformerServer();
 	    System.out.println("Server started");
 	    Log.set(Log.LEVEL_DEBUG);
-	} catch (IOException e) {
+	} catch (IOException | ParserConfigurationException | SAXException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
@@ -41,16 +45,22 @@ public class PlatformerServer {
     private Map<Connection, String> players;
     private Map<String, String> playersTeam;
     private int ready;
+
+    private GameMap gameMap;
+
     private static final int MAX_PLAYER = 4;
 
     /*------------------------------------------------------------------*\
     |*				Constructeurs			    	*|
     \*------------------------------------------------------------------*/
 
-    public PlatformerServer() throws IOException {
+    public PlatformerServer() throws IOException, ParserConfigurationException, SAXException {
 	players = new HashMap<Connection, String>(MAX_PLAYER);
 	playersTeam = new HashMap<String, String>(MAX_PLAYER);
 	ready = 0;
+	gameMap = new GameMap("lvl1Online");
+
+	gameMap.loadCases();
 
 	server = new Server();
 	registerPackets();

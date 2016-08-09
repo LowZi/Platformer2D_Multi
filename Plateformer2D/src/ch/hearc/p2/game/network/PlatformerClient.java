@@ -54,27 +54,6 @@ public class PlatformerClient {
 	playersTeam = new HashMap<String, String>();
 
 	toAddprojectiles = new LinkedList<ProjectileData>();
-
-	team = "";
-	pseudo = "";
-
-	NetworkListener nl = new NetworkListener(client, this);
-	client.addListener(nl);
-
-	client.start();
-
-	client.connect(5000, "localhost", 54555);
-    }
-
-    public PlatformerClient(String adresse) throws IOException {
-	client = new Client();
-
-	register();
-
-	playersData = new HashMap<String, PlayerData>();
-	playersTeam = new HashMap<String, String>();
-
-	toAddprojectiles = new LinkedList<ProjectileData>();
 	disconnectedPlayers = new LinkedList<String>();
 
 	team = "";
@@ -84,8 +63,6 @@ public class PlatformerClient {
 	client.addListener(nl);
 
 	client.start();
-
-	client.connect(5000, adresse, 54555);
     }
 
     /*------------------------------------------------------------------*\
@@ -95,15 +72,6 @@ public class PlatformerClient {
     public static PlatformerClient getInstance() throws IOException {
 	if (plClient == null) {
 	    plClient = new PlatformerClient();
-	    return plClient;
-	} else {
-	    return plClient;
-	}
-    }
-
-    public static PlatformerClient getInstance(String adresse) throws IOException {
-	if (plClient == null) {
-	    plClient = new PlatformerClient(adresse);
 	    return plClient;
 	} else {
 	    return plClient;
@@ -141,6 +109,20 @@ public class PlatformerClient {
     /*------------------------------------------------------------------*\
     |*				Methodes Public		 	    	*|
     \*------------------------------------------------------------------*/
+
+    public void connect(String adresse) throws IOException {
+	if (client.isConnected())
+	    disconnect();
+
+	if (adresse.isEmpty())
+	    adresse = "localhost";
+
+	client.connect(5000, adresse, 54555);
+    }
+
+    public void disconnect() {
+	client.close();
+    }
 
     public void sendTCP(Object o) {
 	client.sendTCP(o);

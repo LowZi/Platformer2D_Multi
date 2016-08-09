@@ -8,7 +8,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.TextField;
@@ -35,7 +34,7 @@ public class ServerChoiceState extends BasicGameState {
 
     private TextField ip;
     private TextField pseudo;
-    
+
     private Font font;
 
     public static String adresseIp;
@@ -51,7 +50,7 @@ public class ServerChoiceState extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
 	font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 35), false);
-	
+
 	// Background image
 	background = new Image("ressources/background/background.jpg");
 
@@ -80,8 +79,11 @@ public class ServerChoiceState extends BasicGameState {
 			// Connection dans le lobby
 			try {
 			    adresseIp = ip.getText();
-			    pfClient = PlatformerClient.getInstance(adresseIp);
+
+			    pfClient = PlatformerClient.getInstance();
+			    pfClient.connect(adresseIp);
 			    pfClient.setPseudo(pseudo.getText());
+
 			    game.enterState(1001);
 			} catch (Exception ex) {
 			    failConnect = true;
@@ -104,9 +106,8 @@ public class ServerChoiceState extends BasicGameState {
 	retourButton.setMouseOverColor(color);
 
 	// TextField
-	ip = new TextFieldPlateformer(container, font,
-		WindowGame.BASE_WINDOW_WIDTH / 2 - connecterImage.getWidth() / 2, 150, connecterImage.getWidth(),
-		connecterImage.getHeight());
+	ip = new TextFieldPlateformer(container, font, WindowGame.BASE_WINDOW_WIDTH / 2 - connecterImage.getWidth() / 2,
+		150, connecterImage.getWidth(), connecterImage.getHeight());
 	pseudo = new TextFieldPlateformer(container, font,
 		WindowGame.BASE_WINDOW_WIDTH / 2 - connecterImage.getWidth() / 2, 300, connecterImage.getWidth(),
 		connecterImage.getHeight());
@@ -127,8 +128,6 @@ public class ServerChoiceState extends BasicGameState {
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 	g.scale(WindowGame.SCALE_W, WindowGame.SCALE_H);
 
-	
-
 	// Render background
 	background.draw(0, 0, WindowGame.BASE_WINDOW_WIDTH, WindowGame.BASE_WINDOW_HEIGHT);
 
@@ -142,10 +141,10 @@ public class ServerChoiceState extends BasicGameState {
 	entrer.render(container, g);
 	ip.render(container, g);
 	pseudo.render(container, g);
-	
+
 	g.setFont(font);
-	g.drawString("IP du serveur: ", WindowGame.BASE_WINDOW_WIDTH / 4 , 150);
-	g.drawString("Pseudo: ", WindowGame.BASE_WINDOW_WIDTH / 4 , 300);
+	g.drawString("IP du serveur: ", WindowGame.BASE_WINDOW_WIDTH / 4, 150);
+	g.drawString("Pseudo: ", WindowGame.BASE_WINDOW_WIDTH / 4, 300);
 
     }
 

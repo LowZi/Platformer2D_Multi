@@ -71,8 +71,8 @@ public class WindowGame extends StateBasedGame {
 	addState(new GameOver());
 	addState(new LevelScreenGameState());
 	addState(new OptionGameState());
-	
-	//Online
+
+	// Online
 	addState(new ServerChoiceState());
 	addState(new LobbyState());
 	addState(new Level1Online("lvl1Online"));
@@ -102,6 +102,12 @@ public class WindowGame extends StateBasedGame {
 	// this will attempt to create a framerate of approximately 60 frames
 	// per second
 	app.setTargetFrameRate(150);
+
+	// The game will always be render and updated even if the focus is not
+	// on the windows
+	app.setAlwaysRender(true);
+	app.setUpdateOnlyWhenVisible(false);
+
 	app.start();
     }
 

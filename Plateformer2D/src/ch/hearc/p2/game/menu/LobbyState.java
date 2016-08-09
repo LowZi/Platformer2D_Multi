@@ -2,10 +2,7 @@ package ch.hearc.p2.game.menu;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
-
-import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -19,30 +16,28 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import ch.hearc.p2.game.WindowGame;
-import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.network.PlatformerClient;
 
 public class LobbyState extends BasicGameState {
 
     public static final int ID = 1001;
+    private static boolean start;
+    private static int id;
+    private static String ip;
 
     private Image background;
     private Image cursor;
     private Image bleu;
     private Image rouge;
     private Image player1;
+
     private Graphics localImgPlayer1;
-
-    private static boolean start;
-    private static int id;
-    private String team;
-    private static String ip;
-
     private Font font;
 
     private PlatformerClient pf;
     private HashMap<String, String> players;
 
+    private String team;
     private Sound rollover;
 
     /*------------------------------------------------------------------*\
@@ -66,7 +61,6 @@ public class LobbyState extends BasicGameState {
 	// Color for button when mous is over
 	// Color color = new Color(255, 157, 67, 180);
 
-	// Button "Quitter"
 	bleu = new Image("ressources/menu/bleu.png");
 	rouge = new Image("ressources/menu/rouge.png");
 
@@ -144,10 +138,8 @@ public class LobbyState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-
 	if (start)
 	    game.enterState(id);
-
     }
 
     public static void startGame(int gameID) {
