@@ -30,8 +30,10 @@ import ch.hearc.p2.game.hud.HudOnline;
 import ch.hearc.p2.game.level.Level;
 import ch.hearc.p2.game.level.LevelObject;
 import ch.hearc.p2.game.level.LevelOnline;
+import ch.hearc.p2.game.level.object.Case;
 import ch.hearc.p2.game.level.object.Objective;
 import ch.hearc.p2.game.menu.PauseGameState;
+import ch.hearc.p2.game.network.CaseData;
 import ch.hearc.p2.game.network.Packet.Packet6SendData;
 import ch.hearc.p2.game.network.Packet.Packet8Projectile;
 import ch.hearc.p2.game.network.PlatformerClient;
@@ -147,15 +149,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 	// MouseAndKeyBoardPlayerController
 	playerController = new MouseAndKeyBoardPlayerControllerOnline(player, level);
 
-	physics = new PhysicsOnline(level);
-
-	/*
-	 * for (ch.hearc.p2.game.character.Character e : otherPlayers) {
-	 * level.addCharacter(e); }
-	 */
-	for (Objective o : cases) {
-	    level.addLevelObject(o);
-	}
+	physics = new PhysicsOnline(level, player);
 
 	level.addLevelObject(weapon);
 
@@ -258,6 +252,8 @@ public abstract class LevelStateOnline extends BasicGameState {
 
 	updatePlayersOnline();
 
+	updateCases();
+
 	// Pour gérer la physique
 	physics.handlePhysics(level, delta);
 
@@ -287,7 +283,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 	time1 = System.currentTimeMillis();
 
 	// Pour voir les objectifs restant
-	cases = level.getObjectives();
+	// cases = level.getObjectives();
 
 	if (shakeAmt > 0f) {
 	    shakeTime -= delta;
@@ -379,15 +375,32 @@ public abstract class LevelStateOnline extends BasicGameState {
 		    p.setLife(playerData.life);
 		    p.setDead(playerData.isDead);
 		    p.setFacing(playerData.facing);
-		    
+
 		    playersWeapon.get(i).setX(p.getX() + 30);
 		    playersWeapon.get(i).setY(p.getY() + 30);
 		    i++;
 		}
-		
+
 	    }
 	}
 
+    }
+
+    private void updateCases() throws SlickException {
+	for (CaseData cd : plClient.getCases()) {
+	    System.out.println("x: " + cd.getX());
+	    System.out.println("y: " + cd.getY());
+	    cases.add(new Case(cd));
+	}
+
+	plClient.getCases().clear();
+
+	for (Objective o : cases) {
+	    System.out.println(o);
+	    level.addLevelObject(o);
+	}
+
+	cases.clear();
     }
 
     @Override
@@ -400,7 +413,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 	    level.render();
 
 	hud.render(g, player);
-	
+
 	int i = 0;
 	for (PlayerOnline p : otherPlayers) {
 	    if (!p.isDead())

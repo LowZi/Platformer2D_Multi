@@ -1,5 +1,5 @@
 
-package ch.hearc.p2.server;
+package ch.hearc.p2.server.data;
 
 public class ProjectileData {
 

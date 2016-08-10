@@ -2,6 +2,7 @@
 package ch.hearc.p2.game.network;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -12,6 +13,8 @@ import com.esotericsoftware.kryonet.Client;
 import ch.hearc.p2.game.enums.Facing;
 import ch.hearc.p2.game.enums.ProjectileType;
 import ch.hearc.p2.game.network.Packet.Packet0LoginRequest;
+import ch.hearc.p2.game.network.Packet.Packet10Cases;
+import ch.hearc.p2.game.network.Packet.Packet11CaseTaken;
 import ch.hearc.p2.game.network.Packet.Packet1LoginAnswer;
 import ch.hearc.p2.game.network.Packet.Packet2Message;
 import ch.hearc.p2.game.network.Packet.Packet3Team;
@@ -35,6 +38,8 @@ public class PlatformerClient {
 
     private LinkedList<ProjectileData> toAddprojectiles;
     private LinkedList<String> disconnectedPlayers;
+
+    private ArrayList<CaseData> cases;
 
     private String team;
     private String pseudo;
@@ -99,11 +104,14 @@ public class PlatformerClient {
 	kryo.register(Packet7AllPlayers.class);
 	kryo.register(Packet8Projectile.class);
 	kryo.register(Packet9Disconnect.class);
+	kryo.register(Packet10Cases.class);
+	kryo.register(Packet11CaseTaken.class);
 
-	kryo.register(ch.hearc.p2.game.network.PlayerData.class);
-	kryo.register(ch.hearc.p2.game.projectile.ProjectileData.class);
+	kryo.register(PlayerData.class);
+	kryo.register(ProjectileData.class);
 	kryo.register(Facing.class);
 	kryo.register(ProjectileType.class);
+	kryo.register(CaseData.class);
     }
 
     /*------------------------------------------------------------------*\
@@ -161,6 +169,10 @@ public class PlatformerClient {
 	this.playersTeam = (HashMap<String, String>) players;
     }
 
+    public void setCases(ArrayList<CaseData> cases) {
+	this.cases = cases;
+    }
+
     /*------------------------------*\
     |*		Get		    *|
     \*------------------------------*/
@@ -191,5 +203,9 @@ public class PlatformerClient {
 	LinkedList<String> cpy = new LinkedList<String>(disconnectedPlayers);
 	disconnectedPlayers.clear();
 	return cpy;
+    }
+
+    public ArrayList<CaseData> getCases() {
+	return this.cases;
     }
 }

@@ -1,11 +1,11 @@
 
 package ch.hearc.p2.game.network;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.hearc.p2.game.enums.ProjectileType;
-import ch.hearc.p2.game.projectile.ProjectileData;
 
 public class Packet {
 
@@ -18,5 +18,7 @@ public class Packet {
     public static class Packet7AllPlayers{public Map players = new HashMap<String, String>();}
     public static class Packet8Projectile{ public float x; public float y; public float xVelocity; public float yVelocity; public ProjectileType type;}
     public static class Packet9Disconnect{public String pseudo;}
+    public static class Packet10Cases{public ArrayList<CaseData> casesData = new ArrayList<CaseData>();}
+    public static class Packet11CaseTaken{public float x; public float y;}
 }
 

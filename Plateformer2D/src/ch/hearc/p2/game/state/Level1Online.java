@@ -31,10 +31,6 @@ public class Level1Online extends LevelStateOnline {
 	// at the start of the game we don't have a player yet
 	player = new PlayerOnline(20 * 70, 16 * 70, Team.RED, "");
 
-	// Remplis Objectifs
-	cases.add(new Case(10 * 70, 3 * 70));
-	cases.add(new Coin(12 * 70, 3 * 70));
-
 	// setup music
 	musiclvl = new Music("ressources/audio/music/lvl1.ogg");
 

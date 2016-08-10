@@ -55,46 +55,6 @@ public class LevelOnline {
 	loadLimite();
 	loadRedSpawn();
 	loadBlueSpawn();
-	loadCases();
-
-    }
-
-    private void loadCases() {
-	// create an array to hold all the tiles in the map
-	cases = new ArrayList<Tile>();
-
-	int layerIndex = map.getLayerIndex("Cases");
-
-	if (layerIndex == -1) {
-	    // we can clean this up later with an exception if we want, but
-	    // because we make the maps ourselfs this will suffice for now
-	    System.err.println("Map does not have the layer \"Cases\"");
-	    System.exit(0);
-	}
-
-	// loop through the whole map
-	for (int x = 0; x < map.getWidth(); x++) {
-	    for (int y = 0; y < map.getHeight(); y++) {
-
-		// get the tile
-		int tileID = map.getTileId(x, y, layerIndex);
-
-		Tile tile = null;
-
-		// and check what kind of tile it is (
-		if (map.getTileProperty(tileID, "tileType", "spawn").equals("spawn")) {
-		    tile = new Tile(x, y, "spwan");
-		    cases.add(tile);
-		}
-	    }
-	}
-
-	// Debug
-	System.out.println("Cases at : ");
-	for (Tile t : cases) {
-	    System.out.println(t.getX() + " - " + t.getY());
-	}
-
     }
 
     private void loadBlueSpawn() {

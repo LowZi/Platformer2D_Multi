@@ -1,4 +1,4 @@
-package ch.hearc.p2.server;
+package ch.hearc.p2.server.util;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -10,9 +10,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class SAXParserMap extends DefaultHandler {
 
-    public static List<Point> spawns = new ArrayList<Point>();
-    private static Point point = null;
-    private static Boolean isGroupObjectCaseSpawn = false;
+    private ArrayList<Point> casesSpawnPoints = new ArrayList<Point>();
+    private Point point = null;
+    private Boolean isGroupObjectCaseSpawn = false;
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -27,7 +27,7 @@ public class SAXParserMap extends DefaultHandler {
 	    if (isGroupObjectCaseSpawn) {
 		point = new Point((int) (Float.parseFloat(attributes.getValue("x")) / 70.0),
 			(int) (Float.parseFloat(attributes.getValue("y")) / 70.0));
-		spawns.add(point);
+		casesSpawnPoints.add(point);
 	    }
 	    break;
 	}
@@ -42,5 +42,9 @@ public class SAXParserMap extends DefaultHandler {
 	    break;
 	}
 	}
+    }
+
+    public ArrayList<Point> getCasesSpawnPoints() {
+	return casesSpawnPoints;
     }
 }

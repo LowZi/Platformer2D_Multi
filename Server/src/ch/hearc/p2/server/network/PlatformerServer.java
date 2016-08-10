@@ -1,28 +1,33 @@
 
-package ch.hearc.p2.server;
+package ch.hearc.p2.server.network;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
-import ch.hearc.p2.server.Packet.Packet0LoginRequest;
-import ch.hearc.p2.server.Packet.Packet1LoginAnswer;
-import ch.hearc.p2.server.Packet.Packet2Message;
-import ch.hearc.p2.server.Packet.Packet3Team;
-import ch.hearc.p2.server.Packet.Packet4StartGame;
-import ch.hearc.p2.server.Packet.Packet6SendData;
-import ch.hearc.p2.server.Packet.Packet7AllPlayers;
-import ch.hearc.p2.server.Packet.Packet8Projectile;
-import ch.hearc.p2.server.Packet.Packet9Disconnect;
+import ch.hearc.p2.server.data.CaseData;
+import ch.hearc.p2.server.data.Facing;
+import ch.hearc.p2.server.data.PlayerData;
+import ch.hearc.p2.server.data.ProjectileData;
+import ch.hearc.p2.server.data.ProjectileType;
+import ch.hearc.p2.server.game.GameMulti;
+import ch.hearc.p2.server.network.Packet.Packet0LoginRequest;
+import ch.hearc.p2.server.network.Packet.Packet10Cases;
+import ch.hearc.p2.server.network.Packet.Packet11CaseTaken;
+import ch.hearc.p2.server.network.Packet.Packet1LoginAnswer;
+import ch.hearc.p2.server.network.Packet.Packet2Message;
+import ch.hearc.p2.server.network.Packet.Packet3Team;
+import ch.hearc.p2.server.network.Packet.Packet4StartGame;
+import ch.hearc.p2.server.network.Packet.Packet6SendData;
+import ch.hearc.p2.server.network.Packet.Packet7AllPlayers;
+import ch.hearc.p2.server.network.Packet.Packet8Projectile;
+import ch.hearc.p2.server.network.Packet.Packet9Disconnect;
 
 public class PlatformerServer {
 
@@ -42,30 +47,19 @@ public class PlatformerServer {
     \*------------------------------------------------------------------*/
 
     private Server server;
-    private Map<Connection, String> players;
-    private Map<String, String> playersTeam;
-    private int ready;
-
-    private GameMap gameMap;
-
-    private static final int MAX_PLAYER = 4;
+    private GameMulti gameMulti;
 
     /*------------------------------------------------------------------*\
     |*				Constructeurs			    	*|
     \*------------------------------------------------------------------*/
 
     public PlatformerServer() throws IOException, ParserConfigurationException, SAXException {
-	players = new HashMap<Connection, String>(MAX_PLAYER);
-	playersTeam = new HashMap<String, String>(MAX_PLAYER);
-	ready = 0;
-	gameMap = new GameMap("lvl1Online");
-
-	gameMap.loadCases();
+	gameMulti = new GameMulti();
 
 	server = new Server();
 	registerPackets();
 
-	NetworkListener nl = new NetworkListener(server, this);
+	NetworkListener nl = new NetworkListener(server, gameMulti);
 	server.addListener(nl);
 
 	server.bind(54555); // Set de TCP port
@@ -93,58 +87,13 @@ public class PlatformerServer {
 	kryo.register(Packet7AllPlayers.class);
 	kryo.register(Packet8Projectile.class);
 	kryo.register(Packet9Disconnect.class);
+	kryo.register(Packet10Cases.class);
+	kryo.register(Packet11CaseTaken.class);
 
 	kryo.register(PlayerData.class);
 	kryo.register(ProjectileData.class);
 	kryo.register(Facing.class);
 	kryo.register(ProjectileType.class);
-    }
-
-    /*------------------------------------------------------------------*\
-    |*				Methodes Public		 	    	*|
-    \*------------------------------------------------------------------*/
-
-    public boolean addPlayer(String s, Connection c) {
-	if (players.size() < MAX_PLAYER) {
-	    players.put(c, s);
-	    return true;
-	} else {
-	    return false;
-	}
-    }
-
-    public void addPlayer(String s, String team) {
-	playersTeam.put(s, team);
-    }
-
-    public void addReady() {
-	ready++;
-    }
-
-    public String removePlayer(Connection c) {
-	String pseudo = players.get(c);
-	players.remove(c);
-	playersTeam.remove(pseudo);
-	return pseudo;
-    }
-
-    /*------------------------------*\
-    |*		Get		    *|
-    \*------------------------------*/
-
-    public int getReady() {
-	return ready;
-    }
-
-    public int getNbPlayers() {
-	return players.size();
-    }
-
-    public Map<Connection, String> getPlayers() {
-	return players;
-    }
-
-    public Map<String, String> getPlayersTeam() {
-	return playersTeam;
+	kryo.register(CaseData.class);
     }
 }

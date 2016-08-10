@@ -1,5 +1,5 @@
 
-package ch.hearc.p2.server;
+package ch.hearc.p2.server.game;
 
 import java.awt.Point;
 import java.io.File;
@@ -12,6 +12,9 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
 
+import ch.hearc.p2.server.data.CaseData;
+import ch.hearc.p2.server.util.SAXParserMap;
+
 public class GameMap {
 
     /*------------------------------------------------------------------*\
@@ -19,6 +22,7 @@ public class GameMap {
     \*------------------------------------------------------------------*/
 
     private ArrayList<Point> casesSpawnPoints;
+    private ArrayList<CaseData> casesData;
     private String mapName;
 
     /*------------------------------------------------------------------*\
@@ -26,8 +30,8 @@ public class GameMap {
     \*------------------------------------------------------------------*/
 
     public GameMap(String mapName) {
-	// map = new TiledMap("ressources/level/" + mapName + ".tmx", false);
 	casesSpawnPoints = new ArrayList<Point>();
+	casesData = new ArrayList<CaseData>();
 	this.mapName = "ressources/level/" + mapName + ".tmx";
     }
 
@@ -42,11 +46,17 @@ public class GameMap {
 
 	parser.parse(new File(mapName), handler);
 
-	// Print all employees.
-	for (Point p : SAXParserMap.spawns) {
-	    System.out.println(p.getX());
-	    System.out.println(p.getY());
+	casesSpawnPoints = handler.getCasesSpawnPoints();
+    }
+
+    public void createCases() {
+	for (Point p : casesSpawnPoints) {
+	    casesData.add(new CaseData(p));
 	}
+    }
+
+    public void spawnCase(float x, float y) {
+	casesData.add(new CaseData(x, y));
     }
 
     /*------------------------------*\
@@ -56,6 +66,10 @@ public class GameMap {
     /*------------------------------*\
     |*		Get		    *|
     \*------------------------------*/
+
+    public ArrayList<CaseData> getCasesData() {
+	return this.casesData;
+    }
 
     /*------------------------------------------------------------------*\
     |*			Methodes Private				*|

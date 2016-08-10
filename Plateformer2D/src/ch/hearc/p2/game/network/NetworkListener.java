@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 
 import ch.hearc.p2.game.menu.LobbyState;
 import ch.hearc.p2.game.network.Packet.Packet0LoginRequest;
+import ch.hearc.p2.game.network.Packet.Packet10Cases;
 import ch.hearc.p2.game.network.Packet.Packet1LoginAnswer;
 import ch.hearc.p2.game.network.Packet.Packet2Message;
 import ch.hearc.p2.game.network.Packet.Packet3Team;
@@ -56,7 +57,7 @@ public class NetworkListener extends Listener {
 
     @Override
     public void received(Connection c, Object o) {
-	System.out.println("[CLIENT] A message was received");
+	// System.out.println("[CLIENT] A message was received");
 
 	if (o instanceof Packet1LoginAnswer) {
 	    boolean answer = ((Packet1LoginAnswer) o).accepted;
@@ -97,6 +98,10 @@ public class NetworkListener extends Listener {
 	if (o instanceof Packet9Disconnect) {
 	    String pseudo = ((Packet9Disconnect) o).pseudo;
 	    plClient.addDisconnectedPlayer(pseudo);
+	}
+
+	if (o instanceof Packet10Cases) {
+	    plClient.setCases(((Packet10Cases) o).casesData);
 	}
     }
 

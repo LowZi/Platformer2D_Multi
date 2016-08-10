@@ -1,5 +1,6 @@
 package ch.hearc.p2.game.physics;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.SlickException;
@@ -14,10 +15,11 @@ import ch.hearc.p2.game.level.object.Case;
 import ch.hearc.p2.game.level.object.Coin;
 import ch.hearc.p2.game.level.object.Objective;
 import ch.hearc.p2.game.level.tile.Tile;
+import ch.hearc.p2.game.network.Packet.Packet11CaseTaken;
+import ch.hearc.p2.game.network.PlatformerClient;
 import ch.hearc.p2.game.projectile.Explosion;
 import ch.hearc.p2.game.projectile.Grenade;
 import ch.hearc.p2.game.projectile.Projectile;
-import ch.hearc.p2.game.projectile.ProjectileAbeille;
 import ch.hearc.p2.game.projectile.ProjectilePlayer;
 import ch.hearc.p2.game.weapon.MuzzleFlash;
 
@@ -33,12 +35,15 @@ public class PhysicsOnline {
     private ArrayList<LevelObject> removeQueue;
     private ArrayList<LevelObject> addQueue;
 
+    private PlayerOnline localPlayer;
+
     /*------------------------------------------------------------------*\
     |*				Constructeurs			    	*|
     \*------------------------------------------------------------------*/
 
-    public PhysicsOnline(LevelOnline level) throws SlickException {
+    public PhysicsOnline(LevelOnline level, PlayerOnline localPlayer) throws SlickException {
 	map = level.getMap();
+	this.localPlayer = localPlayer;
     }
 
     /*------------------------------------------------------------------*\
@@ -107,8 +112,23 @@ public class PhysicsOnline {
 			if (obj.getBoundingShape().checkCollision(c.getBoundingShape())) {
 			    if (obj instanceof Coin)
 				((PlayerOnline) c).addPoint(((Coin) obj).getValue());
-			    if (obj instanceof Case)
-				((PlayerOnline) c).setWeapon(1);
+			    if (obj instanceof Case) {
+				if (c == localPlayer) {
+				    ((PlayerOnline) c).setWeapon(((Case) obj).getIndexWeapon());
+
+				    // Notify the server that we take a case
+				    Packet11CaseTaken ct = new Packet11CaseTaken();
+				    ct.x = ((Case) obj).getX() / 70;
+				    ct.y = ((Case) obj).getY() / 70;
+
+				    try {
+					PlatformerClient.getInstance().sendTCP(ct);
+				    } catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				    }
+				}
+			    }
 			    removeQueueC.add(obj);
 			}
 		    }
