@@ -145,6 +145,11 @@ public abstract class LevelStateOnline extends BasicGameState {
     }
 
     public void initialisationSuite() throws SlickException {
+	if (plClient.getTeam().equals("RED"))
+	    player = new PlayerOnline(20 * 70, 16 * 70, Team.RED, "");
+	else
+	    player = new PlayerOnline(20 * 70, 16 * 70, Team.BLUE, "");
+
 	musiclvl.setVolume(0.4f);
 	weapon = player.getWeapon();
 	// once we initialize our level, we want to load the right level
@@ -229,6 +234,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 	if (player.getLife() <= 0) {
 	    player.setXVelocity(0);
 	    player.setDead(true);
+	    player.setMoving(false);
 	    respawn();
 	}
 
@@ -308,29 +314,29 @@ public abstract class LevelStateOnline extends BasicGameState {
     }
 
     private void respawn() {
-	    player.setLife(6);
-	    new java.util.Timer().schedule(new java.util.TimerTask() {
-			@Override
-			public void run() {
-			    
-			    player.setDead(false);
-			    Random rand = new Random();
+	player.setLife(6);
+	new java.util.Timer().schedule(new java.util.TimerTask() {
+	    @Override
+	    public void run() {
+		player.setLife(6);
+		player.setDead(false);
+		Random rand = new Random();
 
-			    ArrayList<Tile> spawns;
-			    if (player.getTeam() == Team.RED)
-				spawns = spawnRed;
+		ArrayList<Tile> spawns;
+		if (player.getTeam() == Team.RED)
+		    spawns = spawnRed;
 
-			    else
-				spawns = spawnBlue;
+		else
+		    spawns = spawnBlue;
 
-			    int randomNum = rand.nextInt((spawns.size()));
+		int randomNum = rand.nextInt((spawns.size()));
 
-			    Tile tile = spawns.get(randomNum);
-			    player.setX(tile.getX() * 70);
-			    player.setY(tile.getY() * 70);
-			}
-		    }, 5000);
-	
+		Tile tile = spawns.get(randomNum);
+		player.setX(tile.getX() * 70);
+		player.setY(tile.getY() * 70);
+	    }
+	}, 5000);
+
     }
 
     private void handleDisconnectedPlayers() {

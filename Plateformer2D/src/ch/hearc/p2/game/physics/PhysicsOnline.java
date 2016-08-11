@@ -96,45 +96,46 @@ public class PhysicsOnline {
 
 	    if (c instanceof PlayerOnline) {
 
-		if(!c.isDead()){
-		// we have to check if he collides with anything special, such
-		// as objectives for example
-		for (LevelObject obj : level.getLevelObjects()) {
+		if (!c.isDead()) {
+		    // we have to check if he collides with anything special,
+		    // such
+		    // as objectives for example
+		    for (LevelObject obj : level.getLevelObjects()) {
 
-		    if (obj instanceof Projectile) {
-			// in case its an objective and its collides
-			if (obj.getBoundingShape().checkCollision(c.getBoundingShape())) {
-			    c.damage(((Projectile) obj).getDamage());
-			    removeQueueC.add(obj);
-			    c.hit();
+			if (obj instanceof Projectile) {
+			    // in case its an objective and its collides
+			    if (obj.getBoundingShape().checkCollision(c.getBoundingShape())) {
+				c.damage(((Projectile) obj).getDamage());
+				removeQueueC.add(obj);
+				c.hit();
+			    }
 			}
-		    }
-		    if (obj instanceof Objective) {
-			if (obj.getBoundingShape().checkCollision(c.getBoundingShape())) {
-			    if (obj instanceof Coin)
-				((PlayerOnline) c).addPoint(((Coin) obj).getValue());
-			    if (obj instanceof Case) {
-				if (c == localPlayer) {
-				    ((PlayerOnline) c).setWeapon(((Case) obj).getIndexWeapon());
+			if (obj instanceof Objective) {
+			    if (obj.getBoundingShape().checkCollision(c.getBoundingShape())) {
+				if (obj instanceof Coin)
+				    ((PlayerOnline) c).addPoint(((Coin) obj).getValue());
+				if (obj instanceof Case) {
+				    if (c == localPlayer) {
+					((PlayerOnline) c).setWeapon(((Case) obj).getIndexWeapon());
 
-				    // Notify the server that we take a case
-				    Packet11CaseTaken ct = new Packet11CaseTaken();
-				    ct.x = ((Case) obj).getX() / 70;
-				    ct.y = ((Case) obj).getY() / 70;
+					// Notify the server that we take a case
+					Packet11CaseTaken ct = new Packet11CaseTaken();
+					ct.x = ((Case) obj).getX() / 70;
+					ct.y = ((Case) obj).getY() / 70;
 
-				    try {
-					PlatformerClient.getInstance().sendTCP(ct);
-				    } catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					try {
+					    PlatformerClient.getInstance().sendTCP(ct);
+					} catch (IOException e) {
+					    // TODO Auto-generated catch block
+					    e.printStackTrace();
+					}
 				    }
 				}
+				removeQueueC.add(obj);
 			    }
-			    removeQueueC.add(obj);
 			}
-		    }
 
-		}
+		    }
 		}
 		for (LevelObject obj : level.getCharacters()) {
 		    if (obj instanceof Ennemie) {
