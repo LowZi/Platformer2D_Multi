@@ -177,6 +177,7 @@ public class PlayerOnline extends Character {
 	    } else {
 		sprites.get(facing).draw(x - offset_x, y - offset_y);
 	    }
+	    this.weapons.get(weaponIndex).render(offset_x, offset_y);
 	} else if (hited == true && isDead == false) {
 
 	    if (hitedMovingAnimations != null && moving) {
@@ -186,8 +187,11 @@ public class PlayerOnline extends Character {
 	    }
 	    if (time1 - time2 > 50)
 		hited = false;
+	    this.weapons.get(weaponIndex).render(offset_x, offset_y);
 	} else
 	    deadPicture.draw(x - offset_x, y - offset_y);
+	
+	
 
     }
 

@@ -64,6 +64,9 @@ public class NetworkListener extends Listener {
 	Packet9Disconnect disconnectedPlayer = new Packet9Disconnect();
 	disconnectedPlayer.pseudo = pseudo;
 	server.sendToAllTCP(disconnectedPlayer);
+	
+	if(server.getConnections().length == 0)
+	    gameMulti.reset();
 
 	System.out.println("[SERVER] Someone has disconnected");
     }

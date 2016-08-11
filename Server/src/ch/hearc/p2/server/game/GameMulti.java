@@ -101,6 +101,17 @@ public class GameMulti {
 	return this.gameScore;
     }
 
+    public void reset() {
+	players = new HashMap<Connection, String>(MAX_PLAYER);
+	playersTeam = new HashMap<String, String>(MAX_PLAYER);
+
+	gameMap = new GameMap("lvl1Online");
+	gameScore = new GameScore();
+
+	ready = 0;
+	
+    }
+
     /*------------------------------------------------------------------*\
     |*			Methodes Private				*|
     \*------------------------------------------------------------------*/

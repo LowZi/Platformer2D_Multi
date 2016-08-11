@@ -11,5 +11,6 @@ public class PlayerData {
     public int life;
     public boolean isDead;
     public Facing facing;
+    public int indexWeapon;
 
 }
