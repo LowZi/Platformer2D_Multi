@@ -75,26 +75,7 @@ public class MouseAndKeyBoardPlayerControllerOnline extends PlayerControllerOnli
 	if (i.isKeyDown(Input.KEY_SPACE)) {
 	    player.jump();
 	}
-	if (i.isKeyPressed(Input.KEY_H)) {
-	    ArrayList<Tile> spawns;
-	    if (player.getTeam() == Team.BLUE)
-		spawns = level.getBlueSpawn();
-	    else
-		spawns = level.getRedSpawn();
-
-	    Random rand = new Random();
-
-	    int randomNum = rand.nextInt((spawns.size()));
-
-	    Tile tile = spawns.get(randomNum);
-	    player.setX(tile.getX() * 70);
-	    player.setY(tile.getY() * 70);
-
-	    // Debug
-	    System.out.println("Player at after pressing H: ");
-	    System.out.println(player.getX() + "");
-	    System.out.println(player.getY() + "");
-	}
+	
     }
 
     private void handleMouseInput(Input i) throws SlickException {

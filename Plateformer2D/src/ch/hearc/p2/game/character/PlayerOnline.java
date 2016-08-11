@@ -1,8 +1,10 @@
 package ch.hearc.p2.game.character;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -10,6 +12,7 @@ import org.newdawn.slick.Sound;
 
 import ch.hearc.p2.game.enums.Facing;
 import ch.hearc.p2.game.enums.Team;
+import ch.hearc.p2.game.level.tile.Tile;
 import ch.hearc.p2.game.physics.AABoundingRect;
 import ch.hearc.p2.game.weapon.LanceGrenade;
 import ch.hearc.p2.game.weapon.Mitraillette;
@@ -235,7 +238,6 @@ public class PlayerOnline extends Character {
     public Team getTeam() {
 	return team;
     }
-
    
 
 }

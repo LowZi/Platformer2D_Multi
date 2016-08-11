@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.newdawn.slick.GameContainer;
@@ -16,11 +17,8 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import ch.hearc.p2.game.WindowGame;
-import ch.hearc.p2.game.character.Character;
 import ch.hearc.p2.game.character.PlayerOnline;
 import ch.hearc.p2.game.controller.MouseAndKeyBoardPlayerControllerOnline;
 import ch.hearc.p2.game.controller.PlayerControllerOnline;
@@ -32,6 +30,7 @@ import ch.hearc.p2.game.level.LevelObject;
 import ch.hearc.p2.game.level.LevelOnline;
 import ch.hearc.p2.game.level.object.Case;
 import ch.hearc.p2.game.level.object.Objective;
+import ch.hearc.p2.game.level.tile.Tile;
 import ch.hearc.p2.game.menu.PauseGameState;
 import ch.hearc.p2.game.network.CaseData;
 import ch.hearc.p2.game.network.Packet.Packet6SendData;
@@ -70,11 +69,14 @@ public abstract class LevelStateOnline extends BasicGameState {
     protected boolean isPause;
 
     protected Image cursor;
+    protected Image backgroundDead;
 
     protected ArrayList<PlayerOnline> otherPlayers;
     protected ArrayList<Objective> cases;
     protected LinkedList<String> disconnectedPlayers;
     protected ArrayList<Weapon> playersWeapon;
+    protected ArrayList<Tile> spawnBlue;
+    protected ArrayList<Tile> spawnRed;
 
     protected Weapon weapon;
 
@@ -117,8 +119,11 @@ public abstract class LevelStateOnline extends BasicGameState {
 	otherPlayers = new ArrayList<PlayerOnline>();
 	playersWeapon = new ArrayList<Weapon>();
 	cursor = new Image("ressources/cursor/viseur.png");
+	backgroundDead = new Image("ressources/hud/BackgroundDead.png");
 	packetPlayerData = new Packet6SendData();
 	disconnectedPlayers = new LinkedList<String>();
+	spawnBlue = new ArrayList<Tile>();
+	spawnRed = new ArrayList<Tile>();
 	initialisation();
 
     }
@@ -145,6 +150,8 @@ public abstract class LevelStateOnline extends BasicGameState {
 	// once we initialize our level, we want to load the right level
 	level = new LevelOnline(startinglevel, player);
 
+	spawnRed = level.getRedSpawn();
+	spawnBlue = level.getBlueSpawn();
 	// and we create a controller, for now we use the
 	// MouseAndKeyBoardPlayerController
 	playerController = new MouseAndKeyBoardPlayerControllerOnline(player, level);
@@ -221,8 +228,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 	// Pour voir si le player est pas mort
 	if (player.getLife() <= 0) {
 	    player.setDead(true);
-	    musiclvl.fade(20, 0, true);
-	    sbg.enterState(1002, new FadeOutTransition(), new FadeInTransition());
+	    respawn();
 	}
 
 	if (weapon != player.getWeapon()) {
@@ -232,7 +238,8 @@ public abstract class LevelStateOnline extends BasicGameState {
 	}
 
 	// Pour gérer les entrées clavier
-	playerController.handleInput(container.getInput(), delta);
+	if (!player.isDead())
+	    playerController.handleInput(container.getInput(), delta);
 
 	playerData.isMoving = player.isMoving();
 	playerData.x = (int) player.getX();
@@ -297,6 +304,32 @@ public abstract class LevelStateOnline extends BasicGameState {
 	    shake();
 	    physics.setShake(false);
 	}
+    }
+
+    private void respawn() {
+	    player.setLife(6);
+	    new java.util.Timer().schedule(new java.util.TimerTask() {
+			@Override
+			public void run() {
+			    
+			    player.setDead(false);
+			    Random rand = new Random();
+
+			    ArrayList<Tile> spawns;
+			    if (player.getTeam() == Team.RED)
+				spawns = spawnRed;
+
+			    else
+				spawns = spawnBlue;
+
+			    int randomNum = rand.nextInt((spawns.size()));
+
+			    Tile tile = spawns.get(randomNum);
+			    player.setX(tile.getX() * 70);
+			    player.setY(tile.getY() * 70);
+			}
+		    }, 5000);
+	
     }
 
     private void handleDisconnectedPlayers() {
@@ -424,6 +457,9 @@ public abstract class LevelStateOnline extends BasicGameState {
 
 	if (shakeX != 0 && shakeY != 0)
 	    g.translate(-shakeX, -shakeY);
+
+	if (player.isDead())
+	    g.drawImage(backgroundDead, 0, 0);
     }
 
     // this method is overriden from basicgamestate and will trigger once you
