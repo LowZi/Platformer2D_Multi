@@ -101,7 +101,7 @@ public class PlayerOnline extends Character {
 
 	jumpSprite = setSprite(new Image("ressources/character/player/red/p3_jump.png"), jumpSprite);
 	hitedSprites = setSprite(new Image("ressources/character/player/red/p3_hurt.png"), hitedSprites);
-
+	deadPicture = new Image("ressources/character/player/flag/flagRed.png");
     }
 
     private void loadBlueSprite() throws SlickException {
@@ -120,6 +120,7 @@ public class PlayerOnline extends Character {
 
 	jumpSprite = setSprite(new Image("ressources/character/player/blue/p2_jump.png"), jumpSprite);
 	hitedSprites = setSprite(new Image("ressources/character/player/blue/p2_hit.png"), hitedSprites);
+	deadPicture = new Image("ressources/character/player/flag/flagBlue.png");
     }
 
     /*------------------------------------------------------------------*\

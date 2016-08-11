@@ -227,6 +227,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 
 	// Pour voir si le player est pas mort
 	if (player.getLife() <= 0) {
+	    player.setXVelocity(0);
 	    player.setDead(true);
 	    respawn();
 	}
