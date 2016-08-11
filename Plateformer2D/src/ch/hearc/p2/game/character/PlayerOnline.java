@@ -37,7 +37,7 @@ public class PlayerOnline extends Character {
 
     private Team team;
     private String pseudo;
-    
+
     /*------------------------------------------------------------------*\
     |*				Constructeurs			  	*|
     \*------------------------------------------------------------------*/
@@ -70,7 +70,7 @@ public class PlayerOnline extends Character {
 
 	life = 6;
 	isDead = false;
-	
+
 	weapons = new LinkedList<Weapon>();
 	weapons.add(new Mitraillette(0, 0));
 	weapons.add(new LanceGrenade(0, 0));
@@ -168,9 +168,8 @@ public class PlayerOnline extends Character {
 	time1 = System.currentTimeMillis();
 	damage1 = System.currentTimeMillis();
 	
-	
 
-	if (dead == false && hited == false) {
+	if (isDead == false && hited == false) {
 	    if (movingAnimations != null && moving && onGround == true) {
 		movingAnimations.get(facing).draw(x - offset_x, y - offset_y);
 	    } else if (movingAnimations != null && onGround == false) {
@@ -178,7 +177,7 @@ public class PlayerOnline extends Character {
 	    } else {
 		sprites.get(facing).draw(x - offset_x, y - offset_y);
 	    }
-	} else if (hited == true && dead == false) {
+	} else if (hited == true && isDead == false) {
 
 	    if (hitedMovingAnimations != null && moving) {
 		hitedMovingAnimations.get(facing).draw(x - offset_x, y - offset_y);
@@ -216,7 +215,11 @@ public class PlayerOnline extends Character {
 	point = i;
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(Team team) throws SlickException {
+	if (team == Team.RED)
+	    loadRedSprite();
+	else
+	    loadBlueSprite();
 	this.team = team;
     }
 
@@ -239,6 +242,5 @@ public class PlayerOnline extends Character {
     public Team getTeam() {
 	return team;
     }
-   
 
 }

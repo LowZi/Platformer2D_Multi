@@ -258,28 +258,6 @@ public class LevelOnline {
 	return characters;
     }
 
-    public void render() {
-	// render the map first
-	int offset_x = getXOffset();
-	int offset_y = getYOffset();
-
-	renderBackground();
-
-	// then render the map
-	map.render(-(offset_x % 70), -(offset_y % 70), offset_x / 70, offset_y / 70, map.getTileWidth(),
-		map.getHeight());
-
-	// and then render the characters on top of the map
-
-	for (LevelObject obj : levelObjects) {
-	    obj.render(offset_x, offset_y);
-	}
-
-	for (Character c : characters) {
-	    c.render(offset_x, offset_y);
-	}
-
-    }
 
     public void render(float shakeX, float shakeY) {
 	// render the map first

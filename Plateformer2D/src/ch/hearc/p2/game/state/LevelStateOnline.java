@@ -145,11 +145,6 @@ public abstract class LevelStateOnline extends BasicGameState {
     }
 
     public void initialisationSuite() throws SlickException {
-	if (plClient.getTeam().equals("RED"))
-	    player = new PlayerOnline(20 * 70, 16 * 70, Team.RED, "");
-	else
-	    player = new PlayerOnline(20 * 70, 16 * 70, Team.BLUE, "");
-
 	musiclvl.setVolume(0.4f);
 	weapon = player.getWeapon();
 	// once we initialize our level, we want to load the right level
@@ -196,6 +191,11 @@ public abstract class LevelStateOnline extends BasicGameState {
 
 	// Get players with their team
 	playersTeam = (HashMap<String, String>) plClient.getPlayers();
+
+	if (plClient.getTeam().equals("RED"))
+	    player.setTeam(Team.RED);
+	else
+	    player.setTeam(Team.BLUE);
 
 	Set<String> cles = playersTeam.keySet();
 	java.util.Iterator<String> it = cles.iterator();
@@ -447,11 +447,7 @@ public abstract class LevelStateOnline extends BasicGameState {
     public void render(GameContainer container, StateBasedGame sbg, Graphics g) throws SlickException {
 	g.scale(WindowGame.SCALE_W, WindowGame.SCALE_H);
 
-	if (shakeX != 0 && shakeY != 0)
-	    level.render(shakeX, shakeY);
-	else
-	    level.render();
-
+	level.render(shakeX, shakeY);
 	hud.render(g, player);
 
 	int i = 0;
