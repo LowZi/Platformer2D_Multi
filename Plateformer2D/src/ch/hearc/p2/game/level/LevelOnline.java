@@ -276,8 +276,7 @@ public class LevelOnline {
 	}
 
 	for (Character c : characters) {
-	    if (!c.isDead())
-		c.render(offset_x, offset_y);
+	    c.render(offset_x, offset_y);
 	}
 
     }
@@ -301,9 +300,7 @@ public class LevelOnline {
 
 	// Rendu des personnages mais pas du joueur
 	for (Character c : characters) {
-	    if (!(c.isDead())) {
-		c.render(offset_x, offset_y);
-	    }
+	    c.render(offset_x, offset_y);
 	}
 
 	// On afficher le joueur après les autres perso pour être au premier

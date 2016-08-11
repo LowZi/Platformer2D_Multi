@@ -96,6 +96,7 @@ public class PhysicsOnline {
 
 	    if (c instanceof PlayerOnline) {
 
+		if(!c.isDead()){
 		// we have to check if he collides with anything special, such
 		// as objectives for example
 		for (LevelObject obj : level.getLevelObjects()) {
@@ -133,6 +134,7 @@ public class PhysicsOnline {
 			}
 		    }
 
+		}
 		}
 		for (LevelObject obj : level.getCharacters()) {
 		    if (obj instanceof Ennemie) {
