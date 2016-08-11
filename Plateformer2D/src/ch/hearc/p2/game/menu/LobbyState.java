@@ -84,6 +84,8 @@ public class LobbyState extends BasicGameState {
 
 	try {
 	    pf = PlatformerClient.getInstance();
+	    if(!pf.isConnected())
+		game.enterState(1000);
 	} catch (IOException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();

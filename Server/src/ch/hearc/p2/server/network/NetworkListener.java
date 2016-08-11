@@ -64,8 +64,8 @@ public class NetworkListener extends Listener {
 	Packet9Disconnect disconnectedPlayer = new Packet9Disconnect();
 	disconnectedPlayer.pseudo = pseudo;
 	server.sendToAllTCP(disconnectedPlayer);
-	
-	if(server.getConnections().length == 0)
+
+	if (server.getConnections().length == 0)
 	    gameMulti.reset();
 
 	System.out.println("[SERVER] Someone has disconnected");
@@ -116,7 +116,7 @@ public class NetworkListener extends Listener {
 		    Packet4StartGame start = new Packet4StartGame();
 		    start.id = 701;
 		    server.sendToAllTCP(start);
-
+		    gameMulti.setInGame(true);
 		    Packet10Cases cases = new Packet10Cases();
 		    cases.casesData = gameMulti.getGameMap().getCasesData();
 		    server.sendToAllTCP(cases);

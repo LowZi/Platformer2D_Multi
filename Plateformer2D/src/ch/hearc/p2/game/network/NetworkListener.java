@@ -62,8 +62,11 @@ public class NetworkListener extends Listener {
 	if (o instanceof Packet1LoginAnswer) {
 	    boolean answer = ((Packet1LoginAnswer) o).accepted;
 	    if (!answer) {
+		plClient.setConnected(false);
 		c.close();
 	    }
+	    else
+		plClient.setConnected(true);
 	}
 	if (o instanceof Packet3Team) {
 	    String team = ((Packet3Team) o).team;

@@ -44,6 +44,8 @@ public class PlatformerClient {
     private String team;
     private String pseudo;
 
+    private Boolean isConnected;
+
     private static PlatformerClient plClient = null;
 
     /*------------------------------------------------------------------*\
@@ -63,6 +65,8 @@ public class PlatformerClient {
 
 	team = "";
 	pseudo = "";
+	
+	isConnected = false;
 
 	NetworkListener nl = new NetworkListener(client, this);
 	client.addListener(nl);
@@ -161,6 +165,10 @@ public class PlatformerClient {
 	this.team = team;
     }
 
+    public void setConnected(Boolean b) {
+	isConnected = b;
+    }
+
     public void setPseudo(String pseudo) {
 	this.pseudo = pseudo;
     }
@@ -179,6 +187,10 @@ public class PlatformerClient {
 
     public String getTeam() {
 	return team;
+    }
+
+    public Boolean isConnected() {
+	return isConnected;
     }
 
     public HashMap<String, PlayerData> getPlayersData() {

@@ -24,6 +24,8 @@ public class GameMulti {
     private GameMap gameMap;
     private GameScore gameScore;
 
+    private Boolean inGame;
+
     private static final int MAX_PLAYER = 4;
 
     /*------------------------------------------------------------------*\
@@ -37,6 +39,8 @@ public class GameMulti {
 	gameMap = new GameMap("lvl1Online");
 	gameScore = new GameScore();
 
+	inGame = false;
+
 	ready = 0;
     }
 
@@ -45,7 +49,7 @@ public class GameMulti {
     \*------------------------------------------------------------------*/
 
     public boolean addPlayer(String s, Connection c) {
-	if (players.size() < MAX_PLAYER) {
+	if (players.size() < MAX_PLAYER && inGame == false) {
 	    players.put(c, s);
 	    return true;
 	} else {
@@ -108,8 +112,18 @@ public class GameMulti {
 	gameMap = new GameMap("lvl1Online");
 	gameScore = new GameScore();
 
+	inGame = false;
+
 	ready = 0;
-	
+
+    }
+
+    public void setInGame(boolean b) {
+	inGame = b;
+    }
+
+    public Boolean getInGame() {
+	return inGame;
     }
 
     /*------------------------------------------------------------------*\
