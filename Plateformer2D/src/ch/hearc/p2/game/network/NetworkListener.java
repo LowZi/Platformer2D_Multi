@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.menu.LobbyState;
 import ch.hearc.p2.game.network.Packet.Packet0LoginRequest;
 import ch.hearc.p2.game.network.Packet.Packet10Cases;
@@ -69,7 +70,7 @@ public class NetworkListener extends Listener {
 		plClient.setConnected(true);
 	}
 	if (o instanceof Packet3Team) {
-	    String team = ((Packet3Team) o).team;
+	    Team team = ((Packet3Team) o).team;
 	    plClient.setTeam(team);
 
 	    Packet2Message message = new Packet2Message();

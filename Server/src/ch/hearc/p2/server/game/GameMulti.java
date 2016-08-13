@@ -2,8 +2,8 @@
 package ch.hearc.p2.server.game;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -11,64 +11,64 @@ import org.xml.sax.SAXException;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import ch.hearc.p2.server.data.Metadata;
+import ch.hearc.p2.server.data.PlayerMetadata;
+import ch.hearc.p2.server.data.Team;
+
 public class GameMulti {
 
     /*------------------------------------------------------------------*\
     |*			Attributs Private				*|
     \*------------------------------------------------------------------*/
 
-    private Map<Connection, String> players;
-    private Map<String, String> playersTeam;
-    private int ready;
+    private ArrayList<PlayerMetadata> playersConnected;
 
     private GameMap gameMap;
     private GameScore gameScore;
 
     private Boolean inGame;
 
-    private static final int MAX_PLAYER = 4;
+    public static final int MAX_PLAYER = 2;
 
     /*------------------------------------------------------------------*\
     |*			Constructeurs					*|
     \*------------------------------------------------------------------*/
 
     public GameMulti() {
-	players = new HashMap<Connection, String>(MAX_PLAYER);
-	playersTeam = new HashMap<String, String>(MAX_PLAYER);
+
+	playersConnected = new ArrayList<PlayerMetadata>(MAX_PLAYER);
 
 	gameMap = new GameMap("lvl1Online");
 	gameScore = new GameScore();
 
 	inGame = false;
-
-	ready = 0;
     }
 
     /*------------------------------------------------------------------*\
     |*				Methodes Public		 	    	*|
     \*------------------------------------------------------------------*/
 
-    public boolean addPlayer(String s, Connection c) {
-	if (players.size() < MAX_PLAYER && inGame == false) {
-	    players.put(c, s);
+    public boolean addPlayer(Connection connection, String pseudo) {
+	if (playersConnected.size() < MAX_PLAYER && inGame == false) {
+	    playersConnected.add(new PlayerMetadata(connection, pseudo));
 	    return true;
 	} else {
 	    return false;
 	}
     }
 
-    public void addPlayer(String s, String team) {
-	playersTeam.put(s, team);
+    public void setPlayerTeam(Connection connection, Team team) {
+	searchPlayerMetadata(connection).setTeam(team);
     }
 
-    public void addReady() {
-	ready++;
+    public void setPlayerReady(Connection connection, boolean ready) {
+	searchPlayerMetadata(connection).setReady(ready);
     }
 
-    public String removePlayer(Connection c) {
-	String pseudo = players.get(c);
-	players.remove(c);
-	playersTeam.remove(pseudo);
+    public String removePlayer(Connection connection) {
+	PlayerMetadata playerMetadata = searchPlayerMetadata(connection);
+	String pseudo = playerMetadata.getPseudo();
+	playersConnected.remove(playerMetadata);
 	return pseudo;
     }
 
@@ -81,20 +81,24 @@ public class GameMulti {
     |*		Get		    *|
     \*------------------------------*/
 
-    public int getReady() {
-	return ready;
+    public boolean isAllPlayersReady() {
+	for (PlayerMetadata p : playersConnected) {
+	    if (!p.isReady())
+		return false;
+	}
+	return true;
     }
 
     public int getNbPlayers() {
-	return players.size();
+	return playersConnected.size();
     }
 
-    public Map<Connection, String> getPlayers() {
-	return players;
-    }
-
-    public Map<String, String> getPlayersTeam() {
-	return playersTeam;
+    public ArrayList<Metadata> getPlayersConnected() {
+	ArrayList<Metadata> m = new ArrayList<Metadata>();
+	for (PlayerMetadata playerMetadata : playersConnected) {
+	    m.add(new Metadata(playerMetadata.getPseudo(), playerMetadata.getTeam()));
+	}
+	return m;
     }
 
     public GameMap getGameMap() {
@@ -106,16 +110,12 @@ public class GameMulti {
     }
 
     public void reset() {
-	players = new HashMap<Connection, String>(MAX_PLAYER);
-	playersTeam = new HashMap<String, String>(MAX_PLAYER);
+	playersConnected = new ArrayList<PlayerMetadata>();
 
 	gameMap = new GameMap("lvl1Online");
 	gameScore = new GameScore();
 
 	inGame = false;
-
-	ready = 0;
-
     }
 
     public void setInGame(boolean b) {
@@ -129,5 +129,17 @@ public class GameMulti {
     /*------------------------------------------------------------------*\
     |*			Methodes Private				*|
     \*------------------------------------------------------------------*/
+
+    private PlayerMetadata searchPlayerMetadata(Connection connection) {
+	Iterator<PlayerMetadata> it = playersConnected.iterator();
+	PlayerMetadata playerMetadata;
+	while (it.hasNext()) {
+	    playerMetadata = it.next();
+	    if (playerMetadata.getConnection().equals(connection)) {
+		return playerMetadata;
+	    }
+	}
+	return null;
+    }
 
 }

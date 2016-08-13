@@ -1,6 +1,7 @@
 package ch.hearc.p2.game.menu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import ch.hearc.p2.game.WindowGame;
+import ch.hearc.p2.game.enums.Team;
+import ch.hearc.p2.game.network.Metadata;
 import ch.hearc.p2.game.network.PlatformerClient;
 
 public class LobbyState extends BasicGameState {
@@ -35,7 +38,7 @@ public class LobbyState extends BasicGameState {
     private Font font;
 
     private PlatformerClient pf;
-    private HashMap<String, String> players;
+    private ArrayList<Metadata> players;
 
     private String team;
     private Sound rollover;
@@ -84,7 +87,7 @@ public class LobbyState extends BasicGameState {
 
 	try {
 	    pf = PlatformerClient.getInstance();
-	    if(!pf.isConnected())
+	    if (!pf.isConnected())
 		game.enterState(1000);
 	} catch (IOException e) {
 	    // TODO Auto-generated catch block
@@ -108,32 +111,24 @@ public class LobbyState extends BasicGameState {
 	int yRed = 250;
 	int yBlue = 250;
 
-	players = (HashMap<String, String>) pf.getPlayers();
-	Set<String> cles = players.keySet();
-	java.util.Iterator<String> it = cles.iterator();
-	while (it.hasNext()) {
-	    String pseudo = it.next();
-	    String team = players.get(pseudo);
+	players = pf.getPlayers();
 
-	    if (team.equals("BLUE")) {
+	for (Metadata metadata : players) {
+	    if (metadata.getTeam() == Team.BLUE) {
 		localImgPlayer1.setBackground(new Color(67, 167, 223));
 		localImgPlayer1.clear();
 		localImgPlayer1.flush();
 		player1.draw(xBlue, yBlue);
-		// g.setFont(container.getDefaultFont());
-		g.drawString(pseudo, xBlue + 10, yBlue + 10);
+		g.drawString(metadata.getPseudo(), xBlue + 10, yBlue + 10);
 		yBlue += 100;
-
 	    } else {
 		localImgPlayer1.setBackground(new Color(211, 59, 39));
 		localImgPlayer1.clear();
 		localImgPlayer1.flush();
 		player1.draw(xRed, yRed);
-		// g.setFont(container.getDefaultFont());
-		g.drawString(pseudo, xRed + 10, yRed + 10);
+		g.drawString(metadata.getPseudo(), xRed + 10, yRed + 10);
 		yRed += 100;
 	    }
-
 	}
 
     }

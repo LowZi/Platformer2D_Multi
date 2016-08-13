@@ -8,14 +8,18 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
 import ch.hearc.p2.server.data.CaseData;
 import ch.hearc.p2.server.data.Facing;
+import ch.hearc.p2.server.data.Metadata;
 import ch.hearc.p2.server.data.PlayerData;
+import ch.hearc.p2.server.data.PlayerMetadata;
 import ch.hearc.p2.server.data.ProjectileData;
 import ch.hearc.p2.server.data.ProjectileType;
+import ch.hearc.p2.server.data.Team;
 import ch.hearc.p2.server.game.GameMulti;
 import ch.hearc.p2.server.network.Packet.Packet0LoginRequest;
 import ch.hearc.p2.server.network.Packet.Packet10Cases;
@@ -95,5 +99,7 @@ public class PlatformerServer {
 	kryo.register(Facing.class);
 	kryo.register(ProjectileType.class);
 	kryo.register(CaseData.class);
+	kryo.register(Team.class);
+	kryo.register(Metadata.class);
     }
 }

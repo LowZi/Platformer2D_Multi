@@ -35,6 +35,7 @@ import ch.hearc.p2.game.level.object.Objective;
 import ch.hearc.p2.game.level.tile.Tile;
 import ch.hearc.p2.game.menu.PauseGameState;
 import ch.hearc.p2.game.network.CaseData;
+import ch.hearc.p2.game.network.Metadata;
 import ch.hearc.p2.game.network.Packet.Packet6SendData;
 import ch.hearc.p2.game.network.Packet.Packet8Projectile;
 import ch.hearc.p2.game.network.PlatformerClient;
@@ -91,13 +92,13 @@ public abstract class LevelStateOnline extends BasicGameState {
 
     protected HashMap<String, PlayerOnline> playersOnline;
     protected HashMap<String, PlayerData> playerDataOnline;
-    protected HashMap<String, String> playersTeam;
+    protected ArrayList<Metadata> playersMetadata;
 
     protected PlatformerClient plClient;
     protected Packet6SendData packetPlayerData;
 
     protected String pseudo;
-    
+
     private Font font;
 
     /*------------------------------------------------------------------*\
@@ -191,35 +192,16 @@ public abstract class LevelStateOnline extends BasicGameState {
 	pseudo = plClient.getPseudo();
 
 	// Get players with their team
-	playersTeam = (HashMap<String, String>) plClient.getPlayers();
+	playersMetadata = plClient.getPlayers();
 
-	if (plClient.getTeam().equals("RED"))
-	    player.setTeam(Team.RED);
-	else
-	    player.setTeam(Team.BLUE);
+	player.setTeam(plClient.getTeam());
 
-	Set<String> cles = playersTeam.keySet();
-	java.util.Iterator<String> it = cles.iterator();
-	while (it.hasNext()) {
-	    String pseudoPlayer = it.next();
-	    String team = playersTeam.get(pseudoPlayer);
-
-	    if (team.equals("BLUE")) {
-		PlayerOnline pl = new PlayerOnline(20 * 70, 16 * 70, Team.BLUE, pseudoPlayer);
-		if (!pseudo.equals(pseudoPlayer)) {
-		    level.addCharacter(pl);
-		    otherPlayers.add(pl);
-		    pl.setWeapon(0);
-		}
-
-	    } else {
-		PlayerOnline pl = new PlayerOnline(20 * 70, 16 * 70, Team.RED, pseudoPlayer);
-		if (!pseudo.equals(pseudoPlayer)) {
-		    level.addCharacter(pl);
-		    otherPlayers.add(pl);
-		    pl.setWeapon(0);
-		}
-
+	for (Metadata metadata : playersMetadata) {
+	    PlayerOnline pl = new PlayerOnline(20 * 70, 16 * 70, metadata.getTeam(), metadata.getPseudo());
+	    if (!pseudo.equals(metadata.getPseudo())) {
+		level.addCharacter(pl);
+		otherPlayers.add(pl);
+		pl.setWeapon(0);
 	    }
 	}
     }
@@ -424,15 +406,12 @@ public abstract class LevelStateOnline extends BasicGameState {
 
     private void updateCases() throws SlickException {
 	for (CaseData cd : plClient.getCases()) {
-	    System.out.println("x: " + cd.getX());
-	    System.out.println("y: " + cd.getY());
 	    cases.add(new Case(cd));
 	}
 
 	plClient.getCases().clear();
 
 	for (Objective o : cases) {
-	    System.out.println(o);
 	    level.addLevelObject(o);
 	}
 
@@ -447,9 +426,9 @@ public abstract class LevelStateOnline extends BasicGameState {
 	hud.render(g, player);
 
 	for (PlayerOnline p : otherPlayers) {
-		g.drawString(p.getPseudo(), p.getX() - level.getXOffset(), p.getY() - level.getYOffset() - 50);
+	    g.drawString(p.getPseudo(), p.getX() - level.getXOffset(), p.getY() - level.getYOffset() - 50);
 	}
-	
+
 	g.drawString(pseudo, player.getX() - level.getXOffset(), player.getY() - level.getYOffset() - 50);
 
 	if (shakeX != 0 && shakeY != 0)

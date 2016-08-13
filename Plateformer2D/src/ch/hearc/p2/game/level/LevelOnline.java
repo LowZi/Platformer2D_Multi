@@ -86,13 +86,6 @@ public class LevelOnline {
 		}
 	    }
 	}
-
-	// Debug
-	System.out.println("blueSpawn at : ");
-	for (Tile t : blueSpawn) {
-	    System.out.println(t.getX() + " - " + t.getY());
-	}
-
     }
 
     private void loadRedSpawn() {
@@ -124,13 +117,6 @@ public class LevelOnline {
 		}
 	    }
 	}
-
-	// Debug
-	System.out.println("redSpawn at : ");
-	for (Tile t : redSpawn) {
-	    System.out.println(t.getX() + " - " + t.getY());
-	}
-
     }
 
     /*------------------------------------------------------------------*\
@@ -257,7 +243,6 @@ public class LevelOnline {
     public ArrayList<Character> getCharacters() {
 	return characters;
     }
-
 
     public void render(float shakeX, float shakeY) {
 	// render the map first

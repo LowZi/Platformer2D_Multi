@@ -3,6 +3,7 @@ package ch.hearc.p2.server.network;
 
 import java.io.IOException;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -11,7 +12,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
-import ch.hearc.p2.server.data.CaseData;
+import ch.hearc.p2.server.data.Team;
 import ch.hearc.p2.server.game.GameMulti;
 import ch.hearc.p2.server.network.Packet.Packet0LoginRequest;
 import ch.hearc.p2.server.network.Packet.Packet10Cases;
@@ -58,7 +59,7 @@ public class NetworkListener extends Listener {
 	String pseudo = gameMulti.removePlayer(c);
 
 	Packet7AllPlayers allPlayers = new Packet7AllPlayers();
-	allPlayers.players = gameMulti.getPlayersTeam();
+	allPlayers.players = gameMulti.getPlayersConnected();
 	server.sendToAllTCP(allPlayers);
 
 	Packet9Disconnect disconnectedPlayer = new Packet9Disconnect();
@@ -78,21 +79,22 @@ public class NetworkListener extends Listener {
 	if (o instanceof Packet0LoginRequest) {
 	    Packet1LoginAnswer loginAnswer = new Packet1LoginAnswer();
 	    String s = ((Packet0LoginRequest) o).pseudo;
-	    loginAnswer.accepted = gameMulti.addPlayer(s, c);
+	    loginAnswer.accepted = gameMulti.addPlayer(c, s);
 
 	    c.sendTCP(loginAnswer);
 
 	    if (loginAnswer.accepted) {
 		Packet3Team team = new Packet3Team();
-		if (server.getConnections().length % 2 == 0) {
-		    team.team = "BLUE";
+
+		if (gameMulti.getNbPlayers() % 2 == 0) {
+		    team.team = Team.BLUE;
 		} else {
-		    team.team = "RED";
+		    team.team = Team.RED;
 		}
 
 		Packet7AllPlayers allPlayers = new Packet7AllPlayers();
-		gameMulti.addPlayer(s, team.team);
-		allPlayers.players = gameMulti.getPlayersTeam();
+		gameMulti.setPlayerTeam(c, team.team);
+		allPlayers.players = gameMulti.getPlayersConnected();
 
 		c.sendTCP(team);
 		server.sendToAllTCP(allPlayers);
@@ -103,10 +105,10 @@ public class NetworkListener extends Listener {
 	    String message = ((Packet2Message) o).message;
 
 	    if (message.equals("READY")) {
-		gameMulti.addReady();
+		gameMulti.setPlayerReady(c, true);
 
 		// If everybody is ready the game start
-		if (gameMulti.getReady() >= 2) {
+		if (gameMulti.isAllPlayersReady() && gameMulti.getNbPlayers() >= GameMulti.MAX_PLAYER) {
 		    try {
 			gameMulti.startGame();
 		    } catch (ParserConfigurationException | SAXException | IOException e) {

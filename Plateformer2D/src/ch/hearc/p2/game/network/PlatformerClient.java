@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Server;
 
 import ch.hearc.p2.game.enums.Facing;
 import ch.hearc.p2.game.enums.ProjectileType;
+import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.network.Packet.Packet0LoginRequest;
 import ch.hearc.p2.game.network.Packet.Packet10Cases;
 import ch.hearc.p2.game.network.Packet.Packet11CaseTaken;
@@ -34,14 +36,15 @@ public class PlatformerClient {
     private Client client;
 
     private HashMap<String, PlayerData> playersData;
-    private HashMap<String, String> playersTeam;
+
+    private ArrayList<Metadata> players;
 
     private LinkedList<ProjectileData> toAddprojectiles;
     private LinkedList<String> disconnectedPlayers;
 
     private ArrayList<CaseData> cases;
 
-    private String team;
+    private Team team;
     private String pseudo;
 
     private Boolean isConnected;
@@ -58,14 +61,14 @@ public class PlatformerClient {
 	register();
 
 	playersData = new HashMap<String, PlayerData>();
-	playersTeam = new HashMap<String, String>();
+	players = new ArrayList<Metadata>();
 
 	toAddprojectiles = new LinkedList<ProjectileData>();
 	disconnectedPlayers = new LinkedList<String>();
 
-	team = "";
+	team = null;
 	pseudo = "";
-	
+
 	isConnected = false;
 
 	NetworkListener nl = new NetworkListener(client, this);
@@ -116,6 +119,8 @@ public class PlatformerClient {
 	kryo.register(Facing.class);
 	kryo.register(ProjectileType.class);
 	kryo.register(CaseData.class);
+	kryo.register(Team.class);
+	kryo.register(Metadata.class);
     }
 
     /*------------------------------------------------------------------*\
@@ -161,7 +166,7 @@ public class PlatformerClient {
     |*		Set		    *|
     \*------------------------------*/
 
-    public void setTeam(String team) {
+    public void setTeam(Team team) {
 	this.team = team;
     }
 
@@ -173,8 +178,8 @@ public class PlatformerClient {
 	this.pseudo = pseudo;
     }
 
-    public void setPlayers(Map<String, String> players) {
-	this.playersTeam = (HashMap<String, String>) players;
+    public void setPlayers(ArrayList<Metadata> players) {
+	this.players = players;
     }
 
     public void setCases(ArrayList<CaseData> cases) {
@@ -185,7 +190,7 @@ public class PlatformerClient {
     |*		Get		    *|
     \*------------------------------*/
 
-    public String getTeam() {
+    public Team getTeam() {
 	return team;
     }
 
@@ -201,8 +206,8 @@ public class PlatformerClient {
 	return pseudo;
     }
 
-    public Map<String, String> getPlayers() {
-	return playersTeam;
+    public ArrayList<Metadata> getPlayers() {
+	return players;
     }
 
     public LinkedList<ProjectileData> getProjectileData() {
