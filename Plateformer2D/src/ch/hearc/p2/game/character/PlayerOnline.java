@@ -1,10 +1,8 @@
 package ch.hearc.p2.game.character;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -12,7 +10,6 @@ import org.newdawn.slick.Sound;
 
 import ch.hearc.p2.game.enums.Facing;
 import ch.hearc.p2.game.enums.Team;
-import ch.hearc.p2.game.level.tile.Tile;
 import ch.hearc.p2.game.physics.AABoundingRect;
 import ch.hearc.p2.game.weapon.LanceGrenade;
 import ch.hearc.p2.game.weapon.Mitraillette;
@@ -158,16 +155,11 @@ public class PlayerOnline extends Character {
 	}
     }
 
-    public String getPseudo() {
-	return pseudo;
-    }
-
     @Override
     public void render(int offset_x, int offset_y) {
 
 	time1 = System.currentTimeMillis();
 	damage1 = System.currentTimeMillis();
-	
 
 	if (isDead == false && hited == false) {
 	    if (movingAnimations != null && moving && onGround == true) {
@@ -190,8 +182,6 @@ public class PlayerOnline extends Character {
 	    this.weapons.get(weaponIndex).render(offset_x, offset_y);
 	} else
 	    deadPicture.draw(x - offset_x, y - offset_y);
-	
-	
 
     }
 
@@ -220,16 +210,26 @@ public class PlayerOnline extends Character {
     }
 
     public void setTeam(Team team) throws SlickException {
-	if (team == Team.RED)
-	    loadRedSprite();
-	else
-	    loadBlueSprite();
-	this.team = team;
+	if (this.team != team) {
+	    if (team == Team.RED)
+		loadRedSprite();
+	    else
+		loadBlueSprite();
+	    this.team = team;
+	}
+    }
+
+    public void setPseudo(String pseudo) {
+	this.pseudo = pseudo;
     }
 
     /*-----------------------*\
     |*		Get	     *|
     \*-----------------------*/
+
+    public String getPseudo() {
+	return pseudo;
+    }
 
     public int getWeaponIndex() {
 	return weaponIndex;

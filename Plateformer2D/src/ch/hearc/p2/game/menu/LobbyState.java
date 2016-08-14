@@ -2,8 +2,6 @@ package ch.hearc.p2.game.menu;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -11,7 +9,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -26,7 +23,6 @@ public class LobbyState extends BasicGameState {
     public static final int ID = 1001;
     private static boolean start;
     private static int id;
-    private static String ip;
 
     private Image background;
     private Image cursor;
@@ -40,9 +36,6 @@ public class LobbyState extends BasicGameState {
     private PlatformerClient pf;
     private ArrayList<Metadata> players;
 
-    private String team;
-    private Sound rollover;
-
     /*------------------------------------------------------------------*\
     |*				Constructeurs			    	*|
     \*------------------------------------------------------------------*/
@@ -54,9 +47,6 @@ public class LobbyState extends BasicGameState {
 
 	// Background image
 	background = new Image("ressources/background/background.jpg");
-
-	// Sound
-	rollover = new Sound("ressources/audio/sound/rollover.ogg");
 
 	// Cursor image
 	cursor = new Image("ressources/cursor/hand_cursor.png");

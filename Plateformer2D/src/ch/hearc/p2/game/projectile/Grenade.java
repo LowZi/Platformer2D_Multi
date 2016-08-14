@@ -3,6 +3,7 @@ package ch.hearc.p2.game.projectile;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.physics.AABoundingRect;
 
 public class Grenade extends Projectile {
@@ -21,6 +22,13 @@ public class Grenade extends Projectile {
 	grenade = grenade.getScaledCopy(0.5f);
 	boundingShape = new AABoundingRect(x, y, 15f, 15f);
 	maximumFallSpeed = 1;
+    }
+
+    public Grenade(float x, float y, float x_velocity, float y_velocity, String shooter, Team team)
+	    throws SlickException {
+	this(x, y, x_velocity, y_velocity);
+	this.shooter = shooter;
+	this.team = team;
     }
 
     /*------------------------------------------------------------------*\

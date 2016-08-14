@@ -7,7 +7,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import ch.hearc.p2.game.menu.DeadMenuInMulti;
+import ch.hearc.p2.game.menu.EndGameMenu;
 import ch.hearc.p2.game.menu.GameOver;
 import ch.hearc.p2.game.menu.LevelScreenGameState;
 import ch.hearc.p2.game.menu.LobbyState;
@@ -76,7 +76,7 @@ public class WindowGame extends StateBasedGame {
 	addState(new ServerChoiceState());
 	addState(new LobbyState());
 	addState(new Level1Online("lvl1Online"));
-	addState(new DeadMenuInMulti());
+	addState(new EndGameMenu());
     }
 
     /*------------------------------------------------------------------*\

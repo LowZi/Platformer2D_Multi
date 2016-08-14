@@ -2,7 +2,6 @@ package ch.hearc.p2.server.util;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

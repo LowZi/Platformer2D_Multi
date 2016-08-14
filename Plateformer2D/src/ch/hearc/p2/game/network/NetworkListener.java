@@ -9,6 +9,8 @@ import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.menu.LobbyState;
 import ch.hearc.p2.game.network.Packet.Packet0LoginRequest;
 import ch.hearc.p2.game.network.Packet.Packet10Cases;
+import ch.hearc.p2.game.network.Packet.Packet12GameScore;
+import ch.hearc.p2.game.network.Packet.Packet14GameFinished;
 import ch.hearc.p2.game.network.Packet.Packet1LoginAnswer;
 import ch.hearc.p2.game.network.Packet.Packet2Message;
 import ch.hearc.p2.game.network.Packet.Packet3Team;
@@ -65,8 +67,7 @@ public class NetworkListener extends Listener {
 	    if (!answer) {
 		plClient.setConnected(false);
 		c.close();
-	    }
-	    else
+	    } else
 		plClient.setConnected(true);
 	}
 	if (o instanceof Packet3Team) {
@@ -81,6 +82,7 @@ public class NetworkListener extends Listener {
 	if (o instanceof Packet4StartGame) {
 	    int id = ((Packet4StartGame) o).id;
 	    LobbyState.startGame(id);
+
 	}
 
 	if (o instanceof Packet7AllPlayers) {
@@ -96,7 +98,8 @@ public class NetworkListener extends Listener {
 	if (o instanceof Packet8Projectile) {
 
 	    ProjectileData p = new ProjectileData(((Packet8Projectile) o).x, ((Packet8Projectile) o).y,
-		    ((Packet8Projectile) o).xVelocity, ((Packet8Projectile) o).yVelocity, ((Packet8Projectile) o).type);
+		    ((Packet8Projectile) o).xVelocity, ((Packet8Projectile) o).yVelocity, ((Packet8Projectile) o).type,
+		    ((Packet8Projectile) o).shooter, ((Packet8Projectile) o).team);
 	    plClient.putProjectile(p);
 	}
 	if (o instanceof Packet9Disconnect) {
@@ -106,6 +109,17 @@ public class NetworkListener extends Listener {
 
 	if (o instanceof Packet10Cases) {
 	    plClient.setCases(((Packet10Cases) o).casesData);
+	}
+
+	if (o instanceof Packet12GameScore) {
+	    plClient.setGameScore(((Packet12GameScore) o).gameScore);
+	    plClient.setTimeLeft(((Packet12GameScore) o).timeLeft);
+	}
+
+	if (o instanceof Packet14GameFinished) {
+	    plClient.setGameFinished(true);
+	    plClient.setGameScore(((Packet14GameFinished) o).gameScore);
+	    plClient.setWinningTeam(((Packet14GameFinished) o).winningTeam);
 	}
     }
 

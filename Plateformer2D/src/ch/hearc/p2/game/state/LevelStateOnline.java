@@ -35,6 +35,7 @@ import ch.hearc.p2.game.level.object.Objective;
 import ch.hearc.p2.game.level.tile.Tile;
 import ch.hearc.p2.game.menu.PauseGameState;
 import ch.hearc.p2.game.network.CaseData;
+import ch.hearc.p2.game.network.GameScore;
 import ch.hearc.p2.game.network.Metadata;
 import ch.hearc.p2.game.network.Packet.Packet6SendData;
 import ch.hearc.p2.game.network.Packet.Packet8Projectile;
@@ -96,6 +97,8 @@ public abstract class LevelStateOnline extends BasicGameState {
 
     protected PlatformerClient plClient;
     protected Packet6SendData packetPlayerData;
+
+    protected GameScore gameScore;
 
     protected String pseudo;
 
@@ -186,14 +189,14 @@ public abstract class LevelStateOnline extends BasicGameState {
 	try {
 	    plClient = PlatformerClient.getInstance();
 	} catch (IOException e) {
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	pseudo = plClient.getPseudo();
 
+	pseudo = plClient.getPseudo();
 	// Get players with their team
 	playersMetadata = plClient.getPlayers();
 
+	player.setPseudo(pseudo);
 	player.setTeam(plClient.getTeam());
 
 	for (Metadata metadata : playersMetadata) {
@@ -204,10 +207,14 @@ public abstract class LevelStateOnline extends BasicGameState {
 		pl.setWeapon(0);
 	    }
 	}
+
+	gameScore = plClient.getGameScore();
     }
 
     @Override
     public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
+	if (plClient.isGameFinished())
+	    this.sbg.enterState(1002);
 
 	// Pour voir si le player est pas mort
 	if (player.getLife() <= 0) {
@@ -233,13 +240,12 @@ public abstract class LevelStateOnline extends BasicGameState {
 	playerData.facing = player.getFacing();
 	playerData.isDead = player.isDead();
 	playerData.indexWeapon = player.getWeaponIndex();
-
-	getProjectileData();
-
 	packetPlayerData.data = playerData;
 	packetPlayerData.pseudo = pseudo;
 
 	plClient.sendTCP(packetPlayerData);
+
+	getProjectileData();
 
 	handleDisconnectedPlayers();
 
@@ -258,6 +264,10 @@ public abstract class LevelStateOnline extends BasicGameState {
 	// les projectiles au niveau
 	List<LevelObject> toAdd = weapon.getToAddList();
 	for (LevelObject obj : toAdd) {
+	    if (obj instanceof Projectile) {
+		((Projectile) obj).setShooter(pseudo);
+		((Projectile) obj).setTeam(player.getTeam());
+	    }
 	    level.addLevelObject(obj);
 	    shakeAmt = Level.SHAKE_INTENSITY;
 	    if (!(obj instanceof MuzzleFlash) && !(obj instanceof Grenade))
@@ -268,9 +278,10 @@ public abstract class LevelStateOnline extends BasicGameState {
 	List<ProjectileData> projEnnemieToAdd = plClient.getProjectileData();
 	for (ProjectileData obj : projEnnemieToAdd) {
 	    if (obj.proj == ProjectileType.NORMAL)
-		level.addLevelObject(new ProjectilePlayer(obj.x, obj.y, obj.x_velocity, obj.y_velocity));
+		level.addLevelObject(
+			new ProjectilePlayer(obj.x, obj.y, obj.x_velocity, obj.y_velocity, obj.shooter, obj.team));
 	    if (obj.proj == ProjectileType.GRENADE)
-		level.addLevelObject(new Grenade(obj.x, obj.y, obj.x_velocity, obj.y_velocity));
+		level.addLevelObject(new Grenade(obj.x, obj.y, obj.x_velocity, obj.y_velocity, obj.shooter, obj.team));
 	}
 
 	time1 = System.currentTimeMillis();
@@ -290,6 +301,11 @@ public abstract class LevelStateOnline extends BasicGameState {
 	    shake();
 	    physics.setShake(false);
 	}
+
+	// Score
+	// Debug
+	gameScore = plClient.getGameScore();
+	// gameScore.dump();
     }
 
     private void respawn() {
@@ -349,6 +365,8 @@ public abstract class LevelStateOnline extends BasicGameState {
 		    packet.xVelocity = obj.getXVelocity();
 		    packet.yVelocity = obj.getYVelocity();
 		    packet.type = ProjectileType.NORMAL;
+		    packet.shooter = pseudo;
+		    packet.team = plClient.getTeam();
 		    plClient.sendTCP(packet);
 		}
 
@@ -358,6 +376,8 @@ public abstract class LevelStateOnline extends BasicGameState {
 		    packet.xVelocity = obj.getXVelocity();
 		    packet.yVelocity = obj.getYVelocity();
 		    packet.type = ProjectileType.GRENADE;
+		    packet.shooter = pseudo;
+		    packet.team = plClient.getTeam();
 		    plClient.sendTCP(packet);
 		}
 

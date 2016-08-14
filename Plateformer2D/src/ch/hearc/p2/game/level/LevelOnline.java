@@ -8,7 +8,6 @@ import org.newdawn.slick.tiled.TiledMap;
 
 import ch.hearc.p2.game.WindowGame;
 import ch.hearc.p2.game.character.Character;
-import ch.hearc.p2.game.character.Player;
 import ch.hearc.p2.game.character.PlayerOnline;
 import ch.hearc.p2.game.level.object.Objective;
 import ch.hearc.p2.game.level.tile.AirTile;

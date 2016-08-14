@@ -4,14 +4,18 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.level.LevelObject;
 import ch.hearc.p2.game.physics.AABoundingRect;
 
 public class Projectile extends LevelObject {
 
     protected Animation animation;
-    
+
     protected int damage;
+
+    protected String shooter;
+    protected Team team;
 
     /*------------------------------------------------------------------*\
     |*				Constructeurs			    	*|
@@ -25,7 +29,12 @@ public class Projectile extends LevelObject {
 	animation = new Animation(new Image[] { new Image("ressources/tiles/item/laserRed02.png") }, 125);
 	boundingShape = new AABoundingRect(x, y, 15, 15);
 	maximumFallSpeed = 0.0f;
+    }
 
+    public Projectile(float x, float y, String shooter, Team team) throws SlickException {
+	this(x, y);
+	this.shooter = shooter;
+	this.team = team;
     }
 
     /*------------------------------------------------------------------*\
@@ -45,12 +54,28 @@ public class Projectile extends LevelObject {
 	damage = d;
     }
 
+    public void setShooter(String shooter) {
+	this.shooter = shooter;
+    }
+
+    public void setTeam(Team team) {
+	this.team = team;
+    }
+
     /*------------------------------*\
     |*		Get		    *|
     \*------------------------------*/
 
     public int getDamage() {
-	return damage;
+	return this.damage;
+    }
+
+    public String getShooter() {
+	return this.shooter;
+    }
+
+    public Team getTeam() {
+	return this.team;
     }
 
 }

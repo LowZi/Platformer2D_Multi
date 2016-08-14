@@ -3,6 +3,7 @@ package ch.hearc.p2.game.projectile;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.physics.AABoundingRect;
 
 public class ProjectilePlayer extends Projectile {
@@ -23,6 +24,13 @@ public class ProjectilePlayer extends Projectile {
 	boundingShape = new AABoundingRect(x, y, 15, 15);
 	maximumFallSpeed = (float) 0.75;
 
+    }
+
+    public ProjectilePlayer(float x, float y, float x_velocity, float y_velocity, String shooter, Team team)
+	    throws SlickException {
+	this(x, y, x_velocity, y_velocity);
+	this.shooter = shooter;
+	this.team = team;
     }
 
     /*------------------------------------------------------------------*\

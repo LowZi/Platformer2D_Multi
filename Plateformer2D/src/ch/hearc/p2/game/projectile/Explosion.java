@@ -4,13 +4,14 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.physics.AABoundingRect;
 
 public class Explosion extends Projectile {
-    
+
     protected long time1;
     protected long time2;
-    
+
     protected Animation animation;
 
     /*------------------------------------------------------------------*\
@@ -50,6 +51,12 @@ public class Explosion extends Projectile {
 
 	boundingShape = new AABoundingRect(x, y, 200, 200);
 	maximumFallSpeed = 0;
+    }
+
+    public Explosion(float x, float y, String shooter, Team team) throws SlickException {
+	this(x, y);
+	this.shooter = shooter;
+	this.team = team;
     }
 
     /*------------------------------------------------------------------*\

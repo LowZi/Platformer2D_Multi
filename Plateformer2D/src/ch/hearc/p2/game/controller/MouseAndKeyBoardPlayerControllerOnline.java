@@ -2,17 +2,13 @@ package ch.hearc.p2.game.controller;
 
 import java.awt.AWTException;
 import java.awt.Robot;
-import java.util.ArrayList;
-import java.util.Random;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import ch.hearc.p2.game.WindowGame;
 import ch.hearc.p2.game.character.PlayerOnline;
-import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.level.LevelOnline;
-import ch.hearc.p2.game.level.tile.Tile;
 
 public class MouseAndKeyBoardPlayerControllerOnline extends PlayerControllerOnline {
 
@@ -75,7 +71,7 @@ public class MouseAndKeyBoardPlayerControllerOnline extends PlayerControllerOnli
 	if (i.isKeyDown(Input.KEY_SPACE)) {
 	    player.jump();
 	}
-	
+
     }
 
     private void handleMouseInput(Input i) throws SlickException {

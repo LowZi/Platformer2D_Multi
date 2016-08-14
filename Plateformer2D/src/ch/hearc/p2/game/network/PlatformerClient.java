@@ -8,8 +8,6 @@ import java.util.LinkedList;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Server;
 
 import ch.hearc.p2.game.enums.Facing;
 import ch.hearc.p2.game.enums.ProjectileType;
@@ -17,6 +15,9 @@ import ch.hearc.p2.game.enums.Team;
 import ch.hearc.p2.game.network.Packet.Packet0LoginRequest;
 import ch.hearc.p2.game.network.Packet.Packet10Cases;
 import ch.hearc.p2.game.network.Packet.Packet11CaseTaken;
+import ch.hearc.p2.game.network.Packet.Packet12GameScore;
+import ch.hearc.p2.game.network.Packet.Packet13Kill;
+import ch.hearc.p2.game.network.Packet.Packet14GameFinished;
 import ch.hearc.p2.game.network.Packet.Packet1LoginAnswer;
 import ch.hearc.p2.game.network.Packet.Packet2Message;
 import ch.hearc.p2.game.network.Packet.Packet3Team;
@@ -39,6 +40,8 @@ public class PlatformerClient {
 
     private ArrayList<Metadata> players;
 
+    private GameScore gameScore;
+
     private LinkedList<ProjectileData> toAddprojectiles;
     private LinkedList<String> disconnectedPlayers;
 
@@ -48,6 +51,11 @@ public class PlatformerClient {
     private String pseudo;
 
     private Boolean isConnected;
+
+    private int timeLeft;
+
+    private Team winningTeam;
+    private boolean gameFinished;
 
     private static PlatformerClient plClient = null;
 
@@ -63,6 +71,8 @@ public class PlatformerClient {
 	playersData = new HashMap<String, PlayerData>();
 	players = new ArrayList<Metadata>();
 
+	gameScore = new GameScore();
+
 	toAddprojectiles = new LinkedList<ProjectileData>();
 	disconnectedPlayers = new LinkedList<String>();
 
@@ -70,6 +80,12 @@ public class PlatformerClient {
 	pseudo = "";
 
 	isConnected = false;
+
+	timeLeft = 0;
+
+	winningTeam = null;
+
+	gameFinished = false;
 
 	NetworkListener nl = new NetworkListener(client, this);
 	client.addListener(nl);
@@ -113,6 +129,9 @@ public class PlatformerClient {
 	kryo.register(Packet9Disconnect.class);
 	kryo.register(Packet10Cases.class);
 	kryo.register(Packet11CaseTaken.class);
+	kryo.register(Packet12GameScore.class);
+	kryo.register(Packet13Kill.class);
+	kryo.register(Packet14GameFinished.class);
 
 	kryo.register(PlayerData.class);
 	kryo.register(ProjectileData.class);
@@ -121,6 +140,8 @@ public class PlatformerClient {
 	kryo.register(CaseData.class);
 	kryo.register(Team.class);
 	kryo.register(Metadata.class);
+	kryo.register(GameScore.class);
+	kryo.register(IndividualScore.class);
     }
 
     /*------------------------------------------------------------------*\
@@ -186,6 +207,22 @@ public class PlatformerClient {
 	this.cases = cases;
     }
 
+    public void setGameScore(GameScore gameScore) {
+	this.gameScore = gameScore;
+    }
+
+    public void setTimeLeft(int timeLeft) {
+	this.timeLeft = timeLeft;
+    }
+
+    public void setWinningTeam(Team winningTeam) {
+	this.winningTeam = winningTeam;
+    }
+
+    public void setGameFinished(boolean gameFinished) {
+	this.gameFinished = gameFinished;
+    }
+
     /*------------------------------*\
     |*		Get		    *|
     \*------------------------------*/
@@ -224,5 +261,25 @@ public class PlatformerClient {
 
     public ArrayList<CaseData> getCases() {
 	return this.cases;
+    }
+
+    public GameScore getGameScore() {
+	return this.gameScore;
+    }
+
+    public int getTimeLeft() {
+	return this.timeLeft;
+    }
+
+    public Team getWinningTeam() {
+	return this.winningTeam;
+    }
+
+    /*------------------------------*\
+    |*		Is		    *|
+    \*------------------------------*/
+
+    public boolean isGameFinished() {
+	return gameFinished;
     }
 }

@@ -3,7 +3,6 @@ package ch.hearc.p2.server.network;
 
 import java.io.IOException;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -17,6 +16,7 @@ import ch.hearc.p2.server.game.GameMulti;
 import ch.hearc.p2.server.network.Packet.Packet0LoginRequest;
 import ch.hearc.p2.server.network.Packet.Packet10Cases;
 import ch.hearc.p2.server.network.Packet.Packet11CaseTaken;
+import ch.hearc.p2.server.network.Packet.Packet13Kill;
 import ch.hearc.p2.server.network.Packet.Packet1LoginAnswer;
 import ch.hearc.p2.server.network.Packet.Packet2Message;
 import ch.hearc.p2.server.network.Packet.Packet3Team;
@@ -148,6 +148,10 @@ public class NetworkListener extends Listener {
 		    gameMulti.getGameMap().getCasesData().clear();
 		}
 	    }, 5000);
+	}
+
+	if (o instanceof Packet13Kill) {
+	    gameMulti.getGameScore().addKill(((Packet13Kill) o).pseudoKiller, ((Packet13Kill) o).pseudoKilled);
 	}
     }
 }

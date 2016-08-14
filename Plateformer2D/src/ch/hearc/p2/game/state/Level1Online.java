@@ -6,8 +6,6 @@ import org.newdawn.slick.SlickException;
 
 import ch.hearc.p2.game.character.PlayerOnline;
 import ch.hearc.p2.game.enums.Team;
-import ch.hearc.p2.game.level.object.Case;
-import ch.hearc.p2.game.level.object.Coin;
 
 public class Level1Online extends LevelStateOnline {
 

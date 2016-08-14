@@ -1,11 +1,11 @@
 
-package ch.hearc.p2.server.game;
+package ch.hearc.p2.game.network;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import ch.hearc.p2.server.data.Team;
+import ch.hearc.p2.game.enums.Team;
 
 public class GameScore {
 

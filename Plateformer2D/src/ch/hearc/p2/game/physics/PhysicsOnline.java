@@ -16,6 +16,7 @@ import ch.hearc.p2.game.level.object.Coin;
 import ch.hearc.p2.game.level.object.Objective;
 import ch.hearc.p2.game.level.tile.Tile;
 import ch.hearc.p2.game.network.Packet.Packet11CaseTaken;
+import ch.hearc.p2.game.network.Packet.Packet13Kill;
 import ch.hearc.p2.game.network.PlatformerClient;
 import ch.hearc.p2.game.projectile.Explosion;
 import ch.hearc.p2.game.projectile.Grenade;
@@ -108,6 +109,23 @@ public class PhysicsOnline {
 				c.damage(((Projectile) obj).getDamage());
 				removeQueueC.add(obj);
 				c.hit();
+
+				if (c == localPlayer && c.getLife() <= 0) {
+				    Packet13Kill kill = new Packet13Kill();
+				    kill.pseudoKiller = ((Projectile) obj).getShooter();
+				    kill.pseudoKilled = localPlayer.getPseudo();
+
+				    // Debug
+				    System.out.println("killer : " + ((Projectile) obj).getShooter());
+				    System.out.println("killed : " + localPlayer.getPseudo());
+
+				    try {
+					PlatformerClient.getInstance().sendTCP(kill);
+				    } catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				    }
+				}
 			    }
 			}
 			if (obj instanceof Objective) {
@@ -319,14 +337,16 @@ public class PhysicsOnline {
 	    if (obj.isOnGround() == true) {
 		removeQueue.add(obj);
 		if (obj instanceof Grenade) {
-		    addQueue.add(new Explosion(obj.getX() - 100, obj.getY() - 100));
+		    addQueue.add(new Explosion(obj.getX() - 100, obj.getY() - 100, ((Grenade) obj).getShooter(),
+			    ((Grenade) obj).getTeam()));
 		    needShake = true;
 		}
 	    }
 	    if (obj.getYVelocity() == 0 || obj.getXVelocity() == 0) {
 		removeQueue.add(obj);
 		if (obj instanceof Grenade) {
-		    addQueue.add(new Explosion(obj.getX() - 100, obj.getY() - 100));
+		    addQueue.add(new Explosion(obj.getX() - 100, obj.getY() - 100, ((Grenade) obj).getShooter(),
+			    ((Grenade) obj).getTeam()));
 		    needShake = true;
 		}
 	    }

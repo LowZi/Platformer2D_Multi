@@ -1,6 +1,8 @@
 
 package ch.hearc.p2.game.menu;
 
+import java.io.IOException;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -14,12 +16,15 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import ch.hearc.p2.game.WindowGame;
+import ch.hearc.p2.game.enums.Team;
+import ch.hearc.p2.game.network.GameScore;
+import ch.hearc.p2.game.network.PlatformerClient;
 
-public class DeadMenuInMulti extends BasicGameState{
+public class EndGameMenu extends BasicGameState {
 
     public static final int ID = 1002;
 
-    private SlickButton recommencer;
+    private SlickButton returnMainMenu;
 
     private Image background;
     private Image cursor;
@@ -27,6 +32,9 @@ public class DeadMenuInMulti extends BasicGameState{
     private Music deadMusic;
 
     private Sound rollover;
+
+    private GameScore gameScore;
+    private Team winningTeam;
 
     /*------------------------------------------------------------------*\
     |*				Constructeurs			    	*|
@@ -49,21 +57,21 @@ public class DeadMenuInMulti extends BasicGameState{
 	// Color for button when mous is over
 	Color color = new Color(255, 157, 67, 180);
 
-	// Button "Quitter"
-	Image recommencerImage = new Image("ressources/menu/recommencer.png");
+	// Button "Retour menu principal"
+	Image recommencerImage = new Image("ressources/menu/retour.jpg");
 
-	recommencer = new SlickButton(container, recommencerImage,
+	returnMainMenu = new SlickButton(container, recommencerImage,
 		WindowGame.BASE_WINDOW_WIDTH / 2 - recommencerImage.getWidth() / 2, 500, recommencerImage.getWidth(),
 		recommencerImage.getHeight(), new ComponentListener() {
 
 		    @Override
 		    public void componentActivated(AbstractComponent arg0) {
-			game.enterState(701);
+			game.enterState(0);
 		    }
 		});
 
-	recommencer.setMouseOverColor(color);
-	recommencer.setMouseDownSound(rollover);
+	returnMainMenu.setMouseOverColor(color);
+	returnMainMenu.setMouseDownSound(rollover);
     }
 
     /*------------------------------------------------------------------*\
@@ -78,6 +86,17 @@ public class DeadMenuInMulti extends BasicGameState{
 	if (!deadMusic.playing())
 	    deadMusic.loop(1, 0.4f);
 
+	PlatformerClient plClient;
+	try {
+	    plClient = PlatformerClient.getInstance();
+	    gameScore = plClient.getGameScore();
+	    winningTeam = plClient.getWinningTeam();
+	    plClient.setGameFinished(false);
+	    plClient.disconnect();
+	} catch (IOException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 
     @Override
@@ -87,13 +106,20 @@ public class DeadMenuInMulti extends BasicGameState{
 	// Render background
 	background.draw(0, 0, WindowGame.BASE_WINDOW_WIDTH, WindowGame.BASE_WINDOW_HEIGHT);
 
+	if (winningTeam == Team.BLUE)
+	    g.drawString("Blue team win", WindowGame.BASE_WINDOW_WIDTH / 2, 50);
+	else if (winningTeam == Team.RED)
+	    g.drawString("Red team win", WindowGame.BASE_WINDOW_WIDTH / 2, 50);
+	else
+	    g.drawString("Draw", WindowGame.BASE_WINDOW_WIDTH / 2, 50);
+
 	// Render the button
-	recommencer.render(container, g);
+	returnMainMenu.render(container, g);
     }
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-	// empty
+	// gameScore.dump();
     }
 
     /**
@@ -105,4 +131,3 @@ public class DeadMenuInMulti extends BasicGameState{
 	return ID;
     }
 }
-
