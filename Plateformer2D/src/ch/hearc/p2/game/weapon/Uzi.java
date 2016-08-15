@@ -12,10 +12,11 @@ public class Uzi extends Weapon {
     /*------------------------------------------------------------------*\
     |*				Constructeurs			  	*|
     \*------------------------------------------------------------------*/
+    private static final int INITIAL_MUNITION = 300;
 
     public Uzi(float x, float y) throws SlickException {
 	super(x, y);
-	munition = 3000;
+	munition = INITIAL_MUNITION;
 	cadence = 120;
 
 	tir = new Sound("ressources/audio/sound/shoot.ogg");
@@ -82,5 +83,10 @@ public class Uzi extends Weapon {
 	    tir.play();
 
 	}
+    }
+
+    @Override
+    public void resetMunition() {
+	munition = INITIAL_MUNITION;
     }
 }

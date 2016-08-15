@@ -12,10 +12,11 @@ public class Mitraillette extends Weapon {
     /*------------------------------------------------------------------*\
     |*				Constructeurs			  	*|
     \*------------------------------------------------------------------*/
+    private static final int INITIAL_MUNITION = 100;
 
     public Mitraillette(float x, float y) throws SlickException {
 	super(x, y);
-	munition = 900;
+	munition = INITIAL_MUNITION;
 	cadence = 125;
 
 	tir = new Sound("ressources/audio/sound/shoot.ogg");
@@ -76,5 +77,10 @@ public class Mitraillette extends Weapon {
 	    tir.play(1, 0.75f);
 
 	}
+    }
+
+    @Override
+    public void resetMunition() {
+	munition = INITIAL_MUNITION;
     }
 }

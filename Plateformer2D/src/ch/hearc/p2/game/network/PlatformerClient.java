@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -46,6 +47,7 @@ public class PlatformerClient {
     private LinkedList<String> disconnectedPlayers;
 
     private ArrayList<CaseData> cases;
+    private ArrayBlockingQueue<String> killFeed;
 
     private Team team;
     private String pseudo;
@@ -71,6 +73,8 @@ public class PlatformerClient {
 	playersData = new HashMap<String, PlayerData>();
 	players = new ArrayList<Metadata>();
 
+	killFeed = new ArrayBlockingQueue<String>(3);
+
 	gameScore = new GameScore();
 
 	toAddprojectiles = new LinkedList<ProjectileData>();
@@ -89,6 +93,32 @@ public class PlatformerClient {
 
 	NetworkListener nl = new NetworkListener(client, this);
 	client.addListener(nl);
+
+	client.start();
+    }
+
+    public void reset() {
+	client = new Client();
+	register();
+	playersData = new HashMap<String, PlayerData>();
+	players = new ArrayList<Metadata>();
+	killFeed = new ArrayBlockingQueue<String>(3);
+
+	gameScore = new GameScore();
+
+	toAddprojectiles = new LinkedList<ProjectileData>();
+	disconnectedPlayers = new LinkedList<String>();
+
+	team = null;
+	pseudo = "";
+
+	isConnected = false;
+
+	timeLeft = 0;
+
+	winningTeam = null;
+
+	gameFinished = false;
 
 	client.start();
     }
@@ -182,6 +212,16 @@ public class PlatformerClient {
     public void addDisconnectedPlayer(String pseudo) {
 	disconnectedPlayers.add(pseudo);
     }
+    
+    public void addKillToKillFeed(String kill) {
+	try {
+	    if (killFeed.size() == 3)
+		killFeed.poll();
+	    killFeed.put(kill);
+	} catch (InterruptedException e) {
+	    e.printStackTrace();
+	}
+    }
 
     /*------------------------------*\
     |*		Set		    *|
@@ -274,9 +314,13 @@ public class PlatformerClient {
     public Team getWinningTeam() {
 	return this.winningTeam;
     }
+    
+    public ArrayBlockingQueue<String> getKillFeed() {
+	return this.killFeed;
+    }
 
     /*------------------------------*\
-    |*		Is		    *|
+    |*		    Is		    *|
     \*------------------------------*/
 
     public boolean isGameFinished() {

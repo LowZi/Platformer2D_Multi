@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
@@ -36,6 +37,7 @@ import ch.hearc.p2.game.level.tile.Tile;
 import ch.hearc.p2.game.menu.PauseGameState;
 import ch.hearc.p2.game.network.CaseData;
 import ch.hearc.p2.game.network.GameScore;
+import ch.hearc.p2.game.network.IndividualScore;
 import ch.hearc.p2.game.network.Metadata;
 import ch.hearc.p2.game.network.Packet.Packet6SendData;
 import ch.hearc.p2.game.network.Packet.Packet8Projectile;
@@ -71,9 +73,12 @@ public abstract class LevelStateOnline extends BasicGameState {
     protected Music musiclvl;
 
     protected boolean isPause;
-
+    protected boolean drawScore;
+    
     protected Image cursor;
     protected Image backgroundDead;
+    protected Image rouge;
+    protected Image bleu;
 
     protected ArrayList<PlayerOnline> otherPlayers;
     protected ArrayList<Objective> cases;
@@ -126,12 +131,15 @@ public abstract class LevelStateOnline extends BasicGameState {
 	otherPlayers = new ArrayList<PlayerOnline>();
 	cursor = new Image("ressources/cursor/viseur.png");
 	backgroundDead = new Image("ressources/hud/BackgroundDead.png");
+	bleu = new Image("ressources/menu/bleu.png");
+	rouge = new Image("ressources/menu/rouge.png");
 	packetPlayerData = new Packet6SendData();
 	disconnectedPlayers = new LinkedList<String>();
 	spawnBlue = new ArrayList<Tile>();
 	spawnRed = new ArrayList<Tile>();
 	font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 28), false);
 	initialisation();
+	drawScore = false;
 
     }
 
@@ -209,6 +217,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 	}
 
 	gameScore = plClient.getGameScore();
+
     }
 
     @Override
@@ -303,13 +312,14 @@ public abstract class LevelStateOnline extends BasicGameState {
 	}
 
 	// Score
-	// Debug
 	gameScore = plClient.getGameScore();
-	// gameScore.dump();
+
     }
 
     private void respawn() {
 	player.setLife(6);
+	player.setWeapon(0);
+	player.getWeapon().resetMunition();
 	new java.util.Timer().schedule(new java.util.TimerTask() {
 	    @Override
 	    public void run() {
@@ -443,6 +453,7 @@ public abstract class LevelStateOnline extends BasicGameState {
 	g.scale(WindowGame.SCALE_W, WindowGame.SCALE_H);
 	g.setFont(font);
 	level.render(shakeX, shakeY);
+	hud.update();
 	hud.render(g, player);
 
 	for (PlayerOnline p : otherPlayers) {
@@ -456,6 +467,24 @@ public abstract class LevelStateOnline extends BasicGameState {
 
 	if (player.isDead())
 	    g.drawImage(backgroundDead, 0, 0);
+	
+	if(drawScore)
+	{
+		bleu.draw(WindowGame.BASE_WINDOW_WIDTH / 4, 150);
+		g.drawString("(" + gameScore.getBlueTeamScore() + ")", WindowGame.BASE_WINDOW_WIDTH / 4 + bleu.getWidth() + 15,
+			145);
+		rouge.draw((WindowGame.BASE_WINDOW_WIDTH / 4) * 3 - 50, 150);
+		g.drawString("(" + gameScore.getRedTeamScore() + ")",
+			(WindowGame.BASE_WINDOW_WIDTH / 4) * 3 + rouge.getWidth() - 35, 145);
+		
+		int y = 275;
+		for (String line : getBlueScoreString().split("\n"))
+		    g.drawString(line, WindowGame.BASE_WINDOW_WIDTH / 6, y += font.getLineHeight());
+
+		y = 275;
+		for (String line : getRedScoreString().split("\n"))
+		    g.drawString(line, (WindowGame.BASE_WINDOW_WIDTH / 6)*4, y += font.getLineHeight());
+	}
     }
 
     // this method is overriden from basicgamestate and will trigger once you
@@ -468,6 +497,16 @@ public abstract class LevelStateOnline extends BasicGameState {
 	    isPause = true;
 	    sbg.enterState(50);
 	}
+	if(key == Input.KEY_TAB)
+	    drawScore = false;
+	
+    }
+    
+    @Override
+    public void keyPressed(int key, char code){
+	if(key == Input.KEY_TAB)
+	    drawScore = true;
+	
     }
 
     @Override
@@ -492,6 +531,35 @@ public abstract class LevelStateOnline extends BasicGameState {
 	    shakeAmt = 0f;
     }
 
+    private String getBlueScoreString() {
+	String toReturn = "Pseudo      Kill      Death\n\n";
+
+	HashMap<String, IndividualScore> bluePlayersScore = gameScore.getBluePlayersScore();
+
+	Iterator<String> blueIt = bluePlayersScore.keySet().iterator();
+	while (blueIt.hasNext()) {
+	    String pseudo = blueIt.next();
+	    IndividualScore score = bluePlayersScore.get(pseudo);
+	    toReturn += pseudo + "            " + score.getKill() + "            " + score.getDeath() + "\n";
+	}
+
+	return toReturn;
+    }
+
+    private String getRedScoreString() {
+	String toReturn = "Pseudo      Kill      Death\n\n";
+
+	HashMap<String, IndividualScore> redPlayersScore = gameScore.getRedPlayersScore();
+
+	Iterator<String> redIt = redPlayersScore.keySet().iterator();
+	while (redIt.hasNext()) {
+	    String pseudo = redIt.next();
+	    IndividualScore score = redPlayersScore.get(pseudo);
+	    toReturn += pseudo + "            " + score.getKill() + "            " + score.getDeath() + "\n";
+	}
+
+	return toReturn;
+    }
     /*-----------------------*\
     |*		Get	     *|
     \*-----------------------*/

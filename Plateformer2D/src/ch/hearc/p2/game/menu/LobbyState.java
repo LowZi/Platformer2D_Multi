@@ -73,6 +73,7 @@ public class LobbyState extends BasicGameState {
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
 	// Change the image of the cursor when we enter in the state
+	start = false;
 	container.setMouseCursor(cursor, 0, 0);
 
 	try {

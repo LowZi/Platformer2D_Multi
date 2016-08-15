@@ -106,24 +106,28 @@ public class PhysicsOnline {
 			if (obj instanceof Projectile) {
 			    // in case its an objective and its collides
 			    if (obj.getBoundingShape().checkCollision(c.getBoundingShape())) {
-				c.damage(((Projectile) obj).getDamage());
-				removeQueueC.add(obj);
-				c.hit();
+				if (((PlayerOnline) c).getTeam() != ((Projectile) obj).getTeam()) {
 
-				if (c == localPlayer && c.getLife() <= 0) {
-				    Packet13Kill kill = new Packet13Kill();
-				    kill.pseudoKiller = ((Projectile) obj).getShooter();
-				    kill.pseudoKilled = localPlayer.getPseudo();
+				    c.damage(((Projectile) obj).getDamage());
+				    removeQueueC.add(obj);
+				    c.hit();
 
-				    // Debug
-				    System.out.println("killer : " + ((Projectile) obj).getShooter());
-				    System.out.println("killed : " + localPlayer.getPseudo());
+				    if (c == localPlayer && c.getLife() <= 0 && !c.isDead()) {
+					c.setDead(true);
+					Packet13Kill kill = new Packet13Kill();
+					kill.pseudoKiller = ((Projectile) obj).getShooter();
+					kill.pseudoKilled = localPlayer.getPseudo();
 
-				    try {
-					PlatformerClient.getInstance().sendTCP(kill);
-				    } catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					// Debug
+					System.out.println("killer : " + ((Projectile) obj).getShooter());
+					System.out.println("killed : " + localPlayer.getPseudo());
+
+					try {
+					    PlatformerClient.getInstance().sendTCP(kill);
+					} catch (IOException e) {
+					    // TODO Auto-generated catch block
+					    e.printStackTrace();
+					}
 				    }
 				}
 			    }
@@ -135,6 +139,7 @@ public class PhysicsOnline {
 				if (obj instanceof Case) {
 				    if (c == localPlayer) {
 					((PlayerOnline) c).setWeapon(((Case) obj).getIndexWeapon());
+					((PlayerOnline) c).getWeapon().resetMunition();
 
 					// Notify the server that we take a case
 					Packet11CaseTaken ct = new Packet11CaseTaken();

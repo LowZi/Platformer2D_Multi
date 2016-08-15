@@ -10,6 +10,7 @@ import ch.hearc.p2.game.menu.LobbyState;
 import ch.hearc.p2.game.network.Packet.Packet0LoginRequest;
 import ch.hearc.p2.game.network.Packet.Packet10Cases;
 import ch.hearc.p2.game.network.Packet.Packet12GameScore;
+import ch.hearc.p2.game.network.Packet.Packet13Kill;
 import ch.hearc.p2.game.network.Packet.Packet14GameFinished;
 import ch.hearc.p2.game.network.Packet.Packet1LoginAnswer;
 import ch.hearc.p2.game.network.Packet.Packet2Message;
@@ -114,6 +115,13 @@ public class NetworkListener extends Listener {
 	if (o instanceof Packet12GameScore) {
 	    plClient.setGameScore(((Packet12GameScore) o).gameScore);
 	    plClient.setTimeLeft(((Packet12GameScore) o).timeLeft);
+	}
+
+	if (o instanceof Packet13Kill) {
+	    // Update the plClient's killFeed
+	    String kill = ((Packet13Kill) o).pseudoKiller + " KILLED " + ((Packet13Kill) o).pseudoKilled;
+	    System.out.println("Packet : " + kill);
+	    plClient.addKillToKillFeed(kill);
 	}
 
 	if (o instanceof Packet14GameFinished) {

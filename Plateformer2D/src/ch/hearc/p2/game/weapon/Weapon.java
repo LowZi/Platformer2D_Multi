@@ -29,6 +29,7 @@ public class Weapon extends LevelObject {
 
     protected Random random;
 
+    private static final int INITIAL_MUNITION = 100;
     /*------------------------------------------------------------------*\
     |*				Constructeurs			  	*|
     \*------------------------------------------------------------------*/
@@ -119,6 +120,10 @@ public class Weapon extends LevelObject {
 
     public void clearToAddList() {
 	toAddList.clear();
+    }
+    
+    public void resetMunition(){
+	munition = INITIAL_MUNITION;
     }
 
     /*-----------------------*\

@@ -152,6 +152,8 @@ public class NetworkListener extends Listener {
 
 	if (o instanceof Packet13Kill) {
 	    gameMulti.getGameScore().addKill(((Packet13Kill) o).pseudoKiller, ((Packet13Kill) o).pseudoKilled);
+	    gameMulti.sendScore();
+	    server.sendToAllTCP(o);
 	}
     }
 }

@@ -40,7 +40,7 @@ public class GameMulti {
     private Boolean inGame;
 
     public static final int MAX_PLAYER = 2;
-    private static final int GAME_DURATION = 60;
+    private static final int GAME_DURATION = 40;
 
     /*------------------------------------------------------------------*\
     |*			Constructeurs					*|
@@ -123,13 +123,29 @@ public class GameMulti {
     }
 
     public void reset() {
-	playersConnected = new ArrayList<PlayerMetadata>();
+	playersConnected = new ArrayList<PlayerMetadata>(MAX_PLAYER);
 
 	gameMap = new GameMap("lvl1Online");
 	gameScore = new GameScore();
 
+	timer = new Timer(1000, new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		timeLeft--;
+
+		sendScore();
+
+		if (timeLeft == 0)
+		    endGame();
+	    }
+	});
+	
 	inGame = false;
 	timeLeft = GAME_DURATION; // seconds
+	
+	//Debug
+	System.out.println("Serveur reset");
     }
 
     /*------------------------------*\

@@ -12,10 +12,11 @@ public class LanceGrenade extends Weapon {
     /*------------------------------------------------------------------*\
     |*				Constructeurs			  	*|
     \*------------------------------------------------------------------*/
+    private static final int INITIAL_MUNITION = 30;
 
     public LanceGrenade(float x, float y) throws SlickException {
 	super(x, y);
-	munition = 50;
+	munition = INITIAL_MUNITION;
 	cadence = 400;
 	tir = new Sound("ressources/audio/sound/shoot.ogg");
 
@@ -75,5 +76,11 @@ public class LanceGrenade extends Weapon {
 	    tir.play();
 
 	}
+
+    }
+
+    @Override
+    public void resetMunition() {
+	munition = INITIAL_MUNITION;
     }
 }

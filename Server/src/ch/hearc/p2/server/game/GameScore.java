@@ -93,6 +93,14 @@ public class GameScore {
 	return this.redTeamScore;
     }
 
+    public HashMap<String, IndividualScore> getRedPlayersScore() {
+	return redPlayersScore;
+    }
+
+    public HashMap<String, IndividualScore> getBluePlayersScore() {
+	return bluePlayersScore;
+    }
+
     public Team getWinningTeam() {
 	if (blueTeamScore > redTeamScore)
 	    return Team.BLUE;

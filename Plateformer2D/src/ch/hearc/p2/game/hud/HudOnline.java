@@ -1,31 +1,35 @@
 package ch.hearc.p2.game.hud;
 
-import javax.swing.Timer;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.concurrent.ArrayBlockingQueue;
 
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 
 import ch.hearc.p2.game.WindowGame;
-
 import ch.hearc.p2.game.character.PlayerOnline;
+import ch.hearc.p2.game.network.GameScore;
+import ch.hearc.p2.game.network.PlatformerClient;
 
 public class HudOnline {
 
     private Image[] life;
     private Image[] numbers;
-    private CountDown countDown;
-    private Timer timer;
+    private int timeLeft;
+    private GameScore gameScore;
+    private Font font;
+    protected ArrayBlockingQueue<String> killFeed;
 
     /*------------------------------------------------------------------*\
     |*				Constructeurs			  	*|
     \*------------------------------------------------------------------*/
 
     public HudOnline() {
-
-	countDown = new CountDown(1, 5);
-	timer = new Timer(1000, countDown);
-	timer.start();
+	// rien
     }
 
     /*------------------------------------------------------------------*\
@@ -48,18 +52,13 @@ public class HudOnline {
 	numbers[7] = new Image("ressources/hud/hud7.png");
 	numbers[8] = new Image("ressources/hud/hud8.png");
 	numbers[9] = new Image("ressources/hud/hud9.png");
+	font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 40), false);
 
-    }
-
-    public int getTime() {
-	int time = countDown.getSeconds();
-	time += 60 * countDown.getMinutes();
-	return time;
     }
 
     public void render(Graphics g, PlayerOnline p) {
 	g.resetTransform();
-
+	g.setFont(font);
 	g.scale(WindowGame.SCALE_W, WindowGame.SCALE_H);
 
 	switch (p.getLife()) {
@@ -105,14 +104,9 @@ public class HudOnline {
 	// Position pour les points
 	int x = 960;
 
-	int point = p.getPoint();
-	if (point == 0)
-	    g.drawImage(numbers[0], x, 18);
-	while (point > 0) {
-	    g.drawImage(numbers[point % 10], x, 18);
-	    point = point / 10;
-	    x -= 80;
-	}
+	String score = "Blue " + gameScore.getBlueTeamScore() + " : " + gameScore.getRedTeamScore() + " Red";
+
+	g.drawString(score, x, 18);
 
 	int munition = p.getWeapon().getMunition();
 	x = 210;
@@ -125,7 +119,7 @@ public class HudOnline {
 	    x -= 80;
 	}
 
-	int seconds = countDown.getSeconds();
+	int seconds = timeLeft;
 	x = 1680;
 	if (seconds == 0) {
 	    g.drawImage(numbers[0], x, 18);
@@ -139,18 +133,22 @@ public class HudOnline {
 	    x -= 80;
 	}
 
-	int minutes = countDown.getMinutes();
-	x = 1500;
-	if (minutes == 0)
-	    g.drawImage(numbers[0], x, 18);
-	while (minutes > 0) {
-	    g.drawImage(numbers[minutes % 10], x, 18);
-	    minutes = minutes / 10;
-	    x -= 80;
+	int y = WindowGame.BASE_WINDOW_HEIGHT / 5;
+	Iterator<String> it = killFeed.iterator();
+	while (it.hasNext()) {
+	    g.drawString(it.next(), 15, y += font.getLineHeight());
 	}
 
-	if (countDown.isFinished()) {
-	    timer.stop();
+    }
+
+    public void update() {
+	try {
+	    PlatformerClient platformerClient = PlatformerClient.getInstance();
+	    timeLeft = platformerClient.getTimeLeft();
+	    gameScore = platformerClient.getGameScore();
+	    killFeed = platformerClient.getKillFeed();
+	} catch (IOException e) {
+	    e.printStackTrace();
 	}
     }
 
