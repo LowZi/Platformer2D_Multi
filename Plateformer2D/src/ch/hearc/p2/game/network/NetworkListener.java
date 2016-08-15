@@ -55,6 +55,7 @@ public class NetworkListener extends Listener {
 
     @Override
     public void disconnected(Connection arg0) {
+	plClient.setGameFinished(true);
 	System.out.println("[CLIENT] You have disconnected");
 
     }

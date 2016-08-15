@@ -80,7 +80,7 @@ public class EndGameMenu extends BasicGameState {
 	Image recommencerImage = new Image("ressources/menu/retour.jpg");
 
 	returnMainMenu = new SlickButton(container, recommencerImage,
-		WindowGame.BASE_WINDOW_WIDTH / 2 - recommencerImage.getWidth() / 2, 500, recommencerImage.getWidth(),
+		WindowGame.BASE_WINDOW_WIDTH / 2 - recommencerImage.getWidth() / 2, 750, recommencerImage.getWidth(),
 		recommencerImage.getHeight(), new ComponentListener() {
 
 		    @Override
@@ -127,9 +127,9 @@ public class EndGameMenu extends BasicGameState {
 	// Render background
 	background.draw(0, 0, WindowGame.BASE_WINDOW_WIDTH, WindowGame.BASE_WINDOW_HEIGHT);
 	if (winningTeam == Team.BLUE)
-	    g.drawString("Blue team win", (WindowGame.BASE_WINDOW_WIDTH / 2) - 50, 50);
+	    g.drawString("Blue team win", (WindowGame.BASE_WINDOW_WIDTH / 2) - 150, 50);
 	else if (winningTeam == Team.RED)
-	    g.drawString("Red team win", (WindowGame.BASE_WINDOW_WIDTH / 2) - 50, 50);
+	    g.drawString("Red team win", (WindowGame.BASE_WINDOW_WIDTH / 2) - 150, 50);
 	else
 	    g.drawString("Draw", WindowGame.BASE_WINDOW_WIDTH / 2 - 20, 50);
 

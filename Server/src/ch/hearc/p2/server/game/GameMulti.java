@@ -39,8 +39,8 @@ public class GameMulti {
 
     private Boolean inGame;
 
-    public static final int MAX_PLAYER = 2;
-    private static final int GAME_DURATION = 40;
+    public static final int MAX_PLAYER = 3;
+    private static final int GAME_DURATION = 120;
 
     /*------------------------------------------------------------------*\
     |*			Constructeurs					*|
