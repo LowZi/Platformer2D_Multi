@@ -39,7 +39,7 @@ public class GameMulti {
 
     private Boolean inGame;
 
-    public static final int MAX_PLAYER = 3;
+    public static final int MAX_PLAYER = 2;
     private static final int GAME_DURATION = 120;
 
     /*------------------------------------------------------------------*\
@@ -140,11 +140,11 @@ public class GameMulti {
 		    endGame();
 	    }
 	});
-	
+
 	inGame = false;
 	timeLeft = GAME_DURATION; // seconds
-	
-	//Debug
+
+	// Debug
 	System.out.println("Serveur reset");
     }
 

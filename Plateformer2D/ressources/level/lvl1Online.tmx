@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="25" tilewidth="70" tileheight="70" nextobjectid="51">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="99" height="50" tilewidth="70" tileheight="70" nextobjectid="73">
  <tileset firstgid="1" name="sheet" tilewidth="70" tileheight="70" tilecount="98" columns="14">
   <image source="tiles/map/sheet.png" width="980" height="490"/>
   <tile id="37">
@@ -45,46 +45,136 @@
  </tileset>
  <tileset firstgid="99" name="tiles_spritesheet" tilewidth="70" tileheight="70" spacing="2" tilecount="156" columns="12">
   <image source="tiles/map/tiles_spritesheet.png" width="914" height="936"/>
+  <tile id="15">
+   <properties>
+    <property name="tileType" value="halfDown"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="56">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="68">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="117">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="119">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
   <tile id="124">
    <properties>
     <property name="tileType" value="halfDown"/>
    </properties>
   </tile>
+  <tile id="126">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="255" name="spritesheet" tilewidth="70" tileheight="70" spacing="1" tilecount="49" columns="7">
   <image source="tiles/map/spritesheet.png" width="512" height="512"/>
+  <tile id="3">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="37">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
+  <tile id="39">
+   <properties>
+    <property name="tileType" value="half"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="304" name="grayy" tilewidth="32" tileheight="32" tilecount="800" columns="20">
   <image source="tiles/map/grassy_tileset.png" width="640" height="1280"/>
  </tileset>
- <layer name="Limite" width="60" height="25">
+ <layer name="Limite" width="99" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3DQQ0AAAwDoTNZ/1YmYl9IWDVVVVVVVfX1AKrPzwNwFwAA
+   H4sIAAAAAAAAC+3DAQkAAAwEoSv5/assx0DBVVNVVVVVVVVVVVVVVVVVVVVVVVV9/AD6DML4WE0AAA==
   </data>
  </layer>
- <layer name="CollisionLayer" width="60" height="25">
+ <layer name="Object" width="99" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3RsQ3AMAwDQY2iBTxO9l/FSJGWsNIQML/4ngeuqlphPSHhvbvP2yL3xmnKkvqvewdevHj/e1vk3jhNWVL/de/Aixcv3lNvi9wbpylL6r/uHXjx4sV76u2QXusGfi5J7HAXAAA=
+   H4sIAAAAAAAAC+2aO3LDMAxEmQukc+culXwdyxdKmwPkqirTahgIJD6EQGuLnYkzMATsE03Y1KuU8oLSaRvw3o34u47ddvKoRVIrdW2q1p7+PP0GizlYPMBCxWIxsqBiPj/6fL4yC6lvWhY3sFCx4HzTsvgCCxULzjewmJ/FQ8miJ/8MLHpzSXzTslgGs+jNR+2FRzqK7V2rHiw437Kui958VG9HOoqNZKFdF1xO7UyrYcHlouYSTWzrml4sWr5pWESuCy4XtRdqYqNYtHybmQVVhyYWLPi+rf5aYrOy0PQVxcLrM2oEC+v94NWXdibwvie8fbCykNwPXn2BxbgasrLwmmlnYfFD/E/yfXekoteFVZRvvwl81Oib8Xcl4teDWCoXZGNxF7C4g4VYtaf717V/RcCiMCy4a15ZEhZen1FXZdHa92dgkWV2oeYqiVqzpYTFImBR/2ZuYWGZjzPNTa0zhxnWheTcxFOtZ6GkqucZCwuLLCxaPUjEPTN1ts7YR6+6d2f0BSz+970m8aGuI0NNYAEWGWq6OousmqFGCIIgCIIgCJpZ1DnG/nfpqOcunk4xVrV6jz63AIvY3rX1jKrvLBZcf2ABFlIW3owiWFB9gcU8LDx5WM+5o1hESMpCo8hz73dnAb2v/gBjKpLeWE0AAA==
   </data>
  </layer>
- <layer name="Object" width="60" height="25">
+ <layer name="CollisionLayer" width="99" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3VsQ0AIAwDwawD+2T/VZiBAskRV1z/ld1V1fCBHdBwawU0ALxmnwFI4I8ASOCP5ju+o7k2cBcAAA==
+   H4sIAAAAAAAAC+2ZMU4DMRBFnUAVKg4Q0RBuxEU4BC19kGg5Bj0XANEgpNSIPg2LxEqWtfbOjGfGf7Nb/Gaztmf+s8f25hhCOC6C0e2i5lpY4GhhgaMci/UqhGuCtqv2OSBpS/RtPeDbsi5wtLDAkSaLz4Ja5zmF/FqtCzRmCPFMoUZtun3urKBdtA/uRt7dAJ81ehYIczOWdSwouca+T2FdzEULCxyhsfCslWh1OceidH5DOfsgqsY3pDMtoo+e46PVqDlrYYEjr28gSLXIIi80Fla6U1brfLgsXol6AcgBSW8M76gsvP8jbzF/LceU+Jc+f+706OT/XJTz8s/nhwKLofatczklcdZF/Fxj7JtVCBedzjtddboE/mbtmUOJRbpecpLsSacsDT/SfYE6JmVPmgsPjh8UTygsqGN68aCeGS3XqYUnKbshccfM9Sm9i9TGU8tm6M6g5YlGnxzt/xXnRznXW8VYYpKLq8/Bwy9vFhY1QMKEGo8XC4sx9om0OaT952TBw4qLdv8S70s1ieo5VykPyT6i7ZlkLk2ZARqTmnhLfXDiv4/k5TtVcWzS+sXxzUIcDq395nCRsvCWpCZZx9A6R2QG30FekySstf3q4/5pzMTTAyvfa2NrOQ8852Rr/1vFaMEhrT+StTxV1ebecj1o6qvT+4g+AOKs4VFqxz13H5jvo6vP5Yn5/lj+Eg7p2YLDfuo8+vy571P9knKo4RGLOr84c0yr7SFpV8OBy4Pbr9feMnQn4Xg61NZ6jZb8Ko1d8pRyL7PKa+xeSBl3rL1F7DWe5X7n3I81c+LczWvmpwWTGs9y61fy7S7dC7jeS8ZN22r2ZR17rd+aPqF+L+fEbzHuL6LoB8tYTQAA
   </data>
  </layer>
- <layer name="BlueSpawn" width="60" height="25">
+ <layer name="Object2" width="99" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3VMREAMAwDMbMrgvCnEgAl4Mtp0O7JP0mG017BBgB+/hmABnoEQAM94ooFs6VcH3AXAAA=
+   H4sIAAAAAAAAC+3ZMQ6CMBgGUDyHm3fiBh6A0cGJydEDeFeNQRLSFAO0SglveJE0tJb/i7SNdVVVNQAAAAAAAADJTod4+3Gkne/1GasnAPxSuC5Zj+J1sL9hTc+Ra8brlCLHezDHGLImdJ55vQdqwj+ssQ+09wSAaZrPZ7/nuy4YI9Znzjj9vf0cmpnfn9u9gFzocngUMA+6HC4FzIMuhzZoW/LeZr6wzm0kC9Yhi3LIohw5srC+5KlD7t/F3nLJ+bxTswjPp7eJ4/f3hefZqf2HUv6TWdJ3OMcm0pa7XltaL1LOQVs4Q20pi5R5buEZZVGO9xxfHtNVDVhNAAA=
   </data>
  </layer>
- <layer name="RedSpawn" width="60" height="25">
+ <layer name="BlueSpawn" width="99" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3VMREAMAwDMbMrgvCnUgAl4F40aPfknyQDnzsFGwB4+WcAGugRAA30aIcL9TVl/nAXAAA=
+   H4sIAAAAAAAAC+3aoREAMAwDMW+XCbL/Kp2gpCXJnYD4c7uTNPCkBjQAAAAAAAAAAAD88oUCAAAAAAAAYBM7NwA3ByJ/F8FYTQAA
   </data>
  </layer>
- <layer name="Cases" width="60" height="25">
+ <layer name="RedSpawn" width="99" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3MsQ0AMAwCML7rBfn/lZwQpVsrD14AUUkKAAAAAHjGWeZTd7vffsLvGnVNCV1wFwAA
+   H4sIAAAAAAAAC+3aMQ0AAAgDwbpDAf6t4IJAcsPtv7edpAEW1YEGAAAAAAAAAACALT5TAAAAAAAAAHxm9wY+GTfZADNYTQAA
   </data>
  </layer>
 </map>
