@@ -52,31 +52,6 @@ public class GameScore {
 	addDeath(pseudoKilled);
     }
 
-    // Debug
-    public void dump() {
-	System.out.println("Blue team score : " + blueTeamScore);
-	System.out.println("Red team score : " + redTeamScore);
-
-	Iterator<String> it = bluePlayersScore.keySet().iterator();
-	String pseudo = "";
-	while (it.hasNext()) {
-	    pseudo = it.next();
-	    System.out.print(pseudo + " k: " + bluePlayersScore.get(pseudo).getKill() + "  d: "
-		    + bluePlayersScore.get(pseudo).getDeath());
-	}
-	System.out.println("");
-
-	Iterator<String> it1 = redPlayersScore.keySet().iterator();
-	String pseudo1 = "";
-	while (it1.hasNext()) {
-	    pseudo1 = it1.next();
-	    System.out.print(pseudo1 + " k: " + redPlayersScore.get(pseudo1).getKill() + "  d: "
-		    + redPlayersScore.get(pseudo1).getDeath());
-	}
-	System.out.println("");
-
-    }
-
     /*------------------------------*\
     |*		Set	   	    *|
     \*------------------------------*/

@@ -53,11 +53,28 @@ public class PauseGameState extends BasicGameState {
 	// Color for button when mous is over
 	Color color = new Color(255, 157, 67, 180);
 
+
+	// Button "Reprendre"
+	Image reprendreImage = new Image("ressources/menu/reprendre.png");
+
+	reprendre = new SlickButton(container, reprendreImage,
+		WindowGame.BASE_WINDOW_WIDTH / 2 - reprendreImage.getWidth() / 2, 250, reprendreImage.getWidth(),
+		reprendreImage.getHeight(), new ComponentListener() {
+
+		    @Override
+		    public void componentActivated(AbstractComponent arg0) {
+			game.enterState(ID_Last);
+		    }
+		});
+
+	reprendre.setMouseOverColor(color);
+	reprendre.setMouseDownSound(rollover);
+	
 	// Button "Quitter"
 	Image quitterImage = new Image("ressources/menu/quitter.png");
 
 	quitter = new SlickButton(container, quitterImage,
-		WindowGame.BASE_WINDOW_WIDTH / 2 - quitterImage.getWidth() / 2, 250, quitterImage.getWidth(),
+		WindowGame.BASE_WINDOW_WIDTH / 2 - quitterImage.getWidth() / 2, 400, quitterImage.getWidth(),
 		quitterImage.getHeight(), new ComponentListener() {
 
 		    @Override
@@ -75,22 +92,6 @@ public class PauseGameState extends BasicGameState {
 	quitter.setMouseOverColor(color);
 	quitter.setMouseDownSound(rollover);
 
-	// Button "Reprendre"
-	Image reprendreImage = new Image("ressources/menu/reprendre.png");
-
-	reprendre = new SlickButton(container, reprendreImage,
-		WindowGame.BASE_WINDOW_WIDTH / 2 - reprendreImage.getWidth() / 2, 400, reprendreImage.getWidth(),
-		reprendreImage.getHeight(), new ComponentListener() {
-
-		    @Override
-		    public void componentActivated(AbstractComponent arg0) {
-			game.enterState(ID_Last);
-		    }
-		});
-
-	reprendre.setMouseOverColor(color);
-	reprendre.setMouseDownSound(rollover);
-
     }
 
     @Override
@@ -107,8 +108,8 @@ public class PauseGameState extends BasicGameState {
 	background.draw(0, 0, WindowGame.BASE_WINDOW_WIDTH, WindowGame.BASE_WINDOW_HEIGHT);
 
 	// Render the buttons
-	quitter.render(container, g);
 	reprendre.render(container, g);
+	quitter.render(container, g);
     }
 
     @Override
