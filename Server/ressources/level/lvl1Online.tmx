@@ -10536,17 +10536,17 @@
    <tile gid="85"/>
    <tile gid="85"/>
    <tile gid="85"/>
-   <tile gid="285"/>
-   <tile gid="292"/>
-   <tile gid="292"/>
-   <tile gid="292"/>
-   <tile gid="292"/>
-   <tile gid="292"/>
-   <tile gid="292"/>
-   <tile gid="292"/>
-   <tile gid="292"/>
-   <tile gid="292"/>
    <tile gid="258"/>
+   <tile gid="292"/>
+   <tile gid="292"/>
+   <tile gid="292"/>
+   <tile gid="292"/>
+   <tile gid="292"/>
+   <tile gid="292"/>
+   <tile gid="292"/>
+   <tile gid="292"/>
+   <tile gid="292"/>
+   <tile gid="285"/>
    <tile gid="85"/>
    <tile gid="85"/>
    <tile gid="85"/>
@@ -10999,15 +10999,15 @@
    <tile gid="293"/>
    <tile gid="85"/>
    <tile gid="85"/>
-   <tile gid="293"/>
-   <tile gid="259"/>
-   <tile gid="259"/>
-   <tile gid="259"/>
-   <tile gid="259"/>
-   <tile gid="259"/>
-   <tile gid="259"/>
-   <tile gid="259"/>
    <tile gid="266"/>
+   <tile gid="259"/>
+   <tile gid="259"/>
+   <tile gid="259"/>
+   <tile gid="259"/>
+   <tile gid="259"/>
+   <tile gid="259"/>
+   <tile gid="259"/>
+   <tile gid="293"/>
    <tile gid="85"/>
    <tile gid="85"/>
    <tile gid="85"/>
@@ -29872,7 +29872,7 @@
   </data>
  </layer>
  <objectgroup name="CasesSpawns">
-  <object id="59" x="3148" y="2798.67" width="70" height="70"/>
+  <object id="59" x="3153" y="2797.67" width="70" height="70"/>
   <object id="62" x="2872" y="556" width="70" height="70"/>
   <object id="63" x="3429.33" y="1260.67" width="70" height="70"/>
   <object id="64" x="4060" y="558" width="70" height="70"/>
