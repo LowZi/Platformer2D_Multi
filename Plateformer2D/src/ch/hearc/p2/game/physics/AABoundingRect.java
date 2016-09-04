@@ -57,7 +57,6 @@ public class AABoundingRect extends BoundingShape {
     @Override
     public ArrayList<Tile> getTilesOccupying(Tile[][] tiles) {
 	ArrayList<Tile> occupiedTiles = new ArrayList<Tile>();
-	// System.out.println(tiles.length);
 	// we go from the left of the rect towards to right of the rect, making
 	// sure we round upwards to a multiple of 70 or we might miss a few
 	// tiles

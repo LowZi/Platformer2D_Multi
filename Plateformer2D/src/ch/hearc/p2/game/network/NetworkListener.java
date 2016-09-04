@@ -62,8 +62,6 @@ public class NetworkListener extends Listener {
 
     @Override
     public void received(Connection c, Object o) {
-	// System.out.println("[CLIENT] A message was received");
-
 	if (o instanceof Packet1LoginAnswer) {
 	    boolean answer = ((Packet1LoginAnswer) o).accepted;
 	    if (!answer) {
@@ -121,7 +119,6 @@ public class NetworkListener extends Listener {
 	if (o instanceof Packet13Kill) {
 	    // Update the plClient's killFeed
 	    String kill = ((Packet13Kill) o).pseudoKiller + " KILLED " + ((Packet13Kill) o).pseudoKilled;
-	    System.out.println("Packet : " + kill);
 	    plClient.addKillToKillFeed(kill);
 	}
 

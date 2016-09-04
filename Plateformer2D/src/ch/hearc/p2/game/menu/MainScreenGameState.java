@@ -92,11 +92,27 @@ public class MainScreenGameState extends BasicGameState {
 	niveaux.setMouseDownSound(rollover);
 	niveaux.setMouseOverColor(color);
 
+	// Button "multi"
+	Image multiImage = new Image("ressources/menu/multi.jpg");
+
+	multijoueur = new SlickButton(container, multiImage,
+		WindowGame.BASE_WINDOW_WIDTH / 2 - multiImage.getWidth() / 2, 550, multiImage.getWidth(),
+		multiImage.getHeight(), new ComponentListener() {
+
+		    @Override
+		    public void componentActivated(AbstractComponent arg0) {
+			game.enterState(1000);
+		    }
+		});
+
+	multijoueur.setMouseDownSound(rollover);
+	multijoueur.setMouseOverColor(color);
+
 	// Button "options"
 	Image optionsImage = new Image("ressources/menu/options.png");
 
 	options = new SlickButton(container, optionsImage,
-		WindowGame.BASE_WINDOW_WIDTH / 2 - optionsImage.getWidth() / 2, 550, optionsImage.getWidth(),
+		WindowGame.BASE_WINDOW_WIDTH / 2 - optionsImage.getWidth() / 2, 700, optionsImage.getWidth(),
 		optionsImage.getHeight(), new ComponentListener() {
 
 		    @Override
@@ -112,7 +128,7 @@ public class MainScreenGameState extends BasicGameState {
 	Image quitterImage = new Image("ressources/menu/quitter.png");
 
 	quitter = new SlickButton(container, quitterImage,
-		WindowGame.BASE_WINDOW_WIDTH / 2 - quitterImage.getWidth() / 2, 700, quitterImage.getWidth(),
+		WindowGame.BASE_WINDOW_WIDTH / 2 - quitterImage.getWidth() / 2, 850, quitterImage.getWidth(),
 		quitterImage.getHeight(), new ComponentListener() {
 
 		    @Override
@@ -123,22 +139,6 @@ public class MainScreenGameState extends BasicGameState {
 
 	quitter.setMouseDownSound(rollover);
 	quitter.setMouseOverColor(color);
-
-	// Button "multi"
-	Image multiImage = new Image("ressources/menu/multi.jpg");
-
-	multijoueur = new SlickButton(container, multiImage,
-		WindowGame.BASE_WINDOW_WIDTH / 2 - multiImage.getWidth() / 2, 850, multiImage.getWidth(),
-		multiImage.getHeight(), new ComponentListener() {
-
-		    @Override
-		    public void componentActivated(AbstractComponent arg0) {
-			game.enterState(1000);
-		    }
-		});
-
-	multijoueur.setMouseDownSound(rollover);
-	multijoueur.setMouseOverColor(color);
     }
 
     @Override
@@ -160,9 +160,9 @@ public class MainScreenGameState extends BasicGameState {
 	// Render the buttons
 	jouer.render(container, g);
 	niveaux.render(container, g);
+	multijoueur.render(container, g);
 	options.render(container, g);
 	quitter.render(container, g);
-	multijoueur.render(container, g);
     }
 
     @Override

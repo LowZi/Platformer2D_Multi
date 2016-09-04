@@ -215,7 +215,6 @@ public abstract class LevelState extends BasicGameState {
 
 	// Pour voir si le niveau est fini
 	if (physics.isOver() == true) {
-	    // System.out.println("Level finished, loading lvl2");
 	    if (player.hasKey()) {
 		initialisation();
 		sbg.enterState(nextLevel, new FadeOutTransition(), new FadeInTransition());

@@ -39,7 +39,7 @@ public class GameMulti {
 
     private Boolean inGame;
 
-    public static final int MAX_PLAYER = 2;
+    public static final int MAX_PLAYER = 4;
     private static final int GAME_DURATION = 120;
 
     /*------------------------------------------------------------------*\

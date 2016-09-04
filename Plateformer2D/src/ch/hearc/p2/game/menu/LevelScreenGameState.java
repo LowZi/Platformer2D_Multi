@@ -23,7 +23,6 @@ public class LevelScreenGameState extends BasicGameState {
     private SlickButton niveau4;
     private SlickButton niveau5;
     private SlickButton niveau6;
-    private SlickButton niveauOnline1;
     private SlickButton retour;
 
     private Image background;
@@ -146,22 +145,7 @@ public class LevelScreenGameState extends BasicGameState {
 
 	niveau6.setMouseOverColor(color);
 	niveau6.setMouseDownSound(rollover);
-
-	// Button level Online "1"
-	niveau6Image = new Image("ressources/menu/niveaux/niveau6.jpg");
-
-	niveauOnline1 = new SlickButton(container, niveau6Image, 1650, 300, niveau6Image.getWidth(),
-		niveau6Image.getHeight(), new ComponentListener() {
-
-		    @Override
-		    public void componentActivated(AbstractComponent arg0) {
-			game.enterState(701);
-		    }
-		});
-
-	niveauOnline1.setMouseOverColor(color);
-	niveauOnline1.setMouseDownSound(rollover);
-
+	
 	// Button "Retour"
 	Image retourImage = new Image("ressources/menu/retour.jpg");
 
@@ -203,7 +187,6 @@ public class LevelScreenGameState extends BasicGameState {
 	niveau4.render(container, g);
 	niveau5.render(container, g);
 	niveau6.render(container, g);
-	niveauOnline1.render(container, g);
 
 	retour.render(container, g);
     }

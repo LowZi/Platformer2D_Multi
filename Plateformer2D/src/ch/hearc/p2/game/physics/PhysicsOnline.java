@@ -118,10 +118,6 @@ public class PhysicsOnline {
 					kill.pseudoKiller = ((Projectile) obj).getShooter();
 					kill.pseudoKilled = localPlayer.getPseudo();
 
-					// Debug
-					System.out.println("killer : " + ((Projectile) obj).getShooter());
-					System.out.println("killed : " + localPlayer.getPseudo());
-
 					try {
 					    PlatformerClient.getInstance().sendTCP(kill);
 					} catch (IOException e) {
